@@ -8,6 +8,7 @@ const { sequelize } = require('./models/index');
 const app = express();
 
 const userRoutes = require('./routes/user');
+const postRoutes = require('./routes/post');
 
 
 async function main(){
@@ -18,9 +19,6 @@ async function main(){
         console.error('Unable to connect to the database:', error);
     }
 }
-
-
-
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -35,11 +33,11 @@ app.use(bodyParser.json());
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-
-//app.use('/api/sauces', sauceRoutes);
+app.use('/api/post', postRoutes);
 app.use('/api/auth', userRoutes);
 
 main()
+
 app.disable('x-powered-by');
 
 module.exports = app;
