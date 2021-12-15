@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const { sequelize, user, post } = require('../models/index');
+const fs = require('fs');
+const { sequelize, user, post, comment } = require('../models/index');
 
 exports.createPost = (req, res, next) => {
     //req.body = { content }
@@ -63,7 +64,7 @@ exports.getAllPosts = (req, res, next) => {
         .catch(error => res.status(400).json({ error }));
 }
 
-/*Utilise tokenUserUuid mais à remplacer par username (depuis le front) 
+/*Utilise tokenUserUuid mais à remplacer par username (depuis le front ou le stocker dans le token) 
 afin que les messages soient accessibles par d'autres utilisateurs */
 exports.userPosts = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
@@ -74,3 +75,4 @@ exports.userPosts = (req, res, next) => {
         .then((posts) => res.json(posts))
         .catch(error => res.status(400).json({ error }));
 }
+
