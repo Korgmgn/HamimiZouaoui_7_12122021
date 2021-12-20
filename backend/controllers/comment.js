@@ -10,13 +10,14 @@ exports.createComment = (req, res, next) => {
 
     user.findOne({ where: { uuid: tokenUserUuid }})
         .then((user) => {
-            const newComment = { content: req.body.content, userId: user.id };
-            console.log(newComment)        
+            const newComment = { content: req.body.content, userId: user.id, postId: req.params.uuid };
+            console.log(newComment)
             
             comment.create(newComment)
                 .then((newComment) => res.json(newComment))
                 .catch(error => res.status(400).json({ error }));
         })
+        .catch(error => res.status(400).json({ error }));
 }
 
 exports.modifyComment = (req, res, next) => {

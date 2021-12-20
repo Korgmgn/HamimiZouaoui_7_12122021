@@ -43,11 +43,11 @@ exports.login = (req, res, next) => {
 
 //Empêcher l'envoie de champs vides
 exports.modifyUser = (req, res, next) => {
-    const token = req.headers.authorization.split(' ')[1];
+/*     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const tokenUserUuid = decodedToken.userUuid;
-
-    user.findOne({ where: { uuid: tokenUserUuid }})
+ */
+    user.findOne({ where: { uuid: req.body.userUuid }})
         .then((user) =>
             bcrypt.hash(req.body.password, 10)
                 .then((hash) => {

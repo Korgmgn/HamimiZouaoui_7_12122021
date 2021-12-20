@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate({ post, comment }) {
       // define association here
       this.hasMany(post, { foreignKey: 'userId', as: 'posts' })
-      this.hasMany(post, { foreignKey: 'userId', as: 'comments' })
+      this.hasMany(comment, { foreignKey: 'userId', as: 'comments' })
     }
     //Modifie la réponse par défaut afin de cacher l'id
     toJSON(){

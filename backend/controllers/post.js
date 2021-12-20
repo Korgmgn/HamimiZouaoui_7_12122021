@@ -13,7 +13,7 @@ exports.createPost = (req, res, next) => {
             const newPost = { content: req.body.content, userId: user.id };
             console.log(newPost)        
             
-            post.create(newPost)
+            post.create(newPost) //utiliser include + voir discord
                 .then((newPost) => res.json(newPost))
                 .catch(error => res.status(400).json({ error }));
         })
@@ -56,7 +56,6 @@ exports.deletePost = (req, res, next) => {
         })
         .catch(error => res.status(400).json({ error }));
 }
-
 
 exports.getAllPosts = (req, res, next) => {
     post.findAll({ include: user })

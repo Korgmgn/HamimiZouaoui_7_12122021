@@ -8,6 +8,7 @@ module.exports = (req, res, next) => {
         if(req.body.userUuid && req.body.userUuid !== userUuid) { //revoir le mail 
             throw 'User ID non valable !';
         } else {
+            req.body.userUuid = userUuid;
             next()
         }
     } catch (error) {

@@ -9,7 +9,7 @@ router.post('/newpost', auth, postCtrl.createPost);
 router.put('/modifypost/:uuid', auth, postCtrl.modifyPost);
 router.delete('/deletepost/:uuid', auth, postCtrl.deletePost);
 
-router.post('/comment', auth, commentCtrl.createComment);
+router.post('/comment/:uuid', auth, commentCtrl.createComment);
 router.put('/modifycomment/:uuid', auth, commentCtrl.modifyComment);
 router.delete('/deletecomment/:uuid', auth, commentCtrl.deleteComment);
 
