@@ -9,6 +9,7 @@ const app = express();
 
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
+const commentRoutes = require('./routes/comment');
 
 
 async function main(){
@@ -33,8 +34,9 @@ app.use(bodyParser.json());
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-app.use('/api/post', postRoutes);
-app.use('/api/auth', userRoutes);
+app.use('/comments', commentRoutes);
+app.use('/posts', postRoutes);
+app.use('/users', userRoutes);
 
 main()
 

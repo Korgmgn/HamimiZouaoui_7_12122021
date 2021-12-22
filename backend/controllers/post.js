@@ -8,6 +8,7 @@ exports.createPost = (req, res, next) => {
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const tokenUserUuid = decodedToken.userUuid;
 
+    console.log('Je suis arrivé au controller !')
     user.findOne({ where: { uuid: tokenUserUuid }})
         .then((user) => {
             const newPost = { content: req.body.content, userId: user.id };
