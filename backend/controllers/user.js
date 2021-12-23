@@ -64,11 +64,11 @@ exports.modifyUser = (req, res, next) => {
 }
 
  exports.delete = (req, res, next) => {
-    const token = req.headers.authorization.split(' ')[1];
+/*     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const tokenUserUuid = decodedToken.userUuid;
-
-    user.findOne({ where: { uuid: tokenUserUuid }})
+ */
+    user.findOne({ where: { uuid: req.body.userUuid }})
         .then((user) => 
             user.destroy()
                 .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
@@ -76,3 +76,5 @@ exports.modifyUser = (req, res, next) => {
         )
         .catch(error => res.status(403).json({ error: 'Unauthorized request !' }))
 }
+
+//ajouter route gestion de page user.findOne({ where: {{ uuid: req.body.uuid })
