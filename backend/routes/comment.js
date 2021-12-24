@@ -8,6 +8,6 @@ router.post('/create/:postuuid', auth, commentCtrl.createComment);
 router.put('/modify/:commentuuid', auth, commentCtrl.modifyComment);
 router.delete('/delete/:commentuuid', auth, commentCtrl.deleteComment);
 
-//router.get('allcomments/:postuuid', auth, commentCtrl.allComments);
+router.get('/allcomments/:postuuid', auth, commentCtrl.allComments);
 
 module.exports = router;

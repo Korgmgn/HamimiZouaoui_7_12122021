@@ -41,12 +41,7 @@ exports.login = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
 };
 
-//Empêcher l'envoie de champs vides
 exports.modifyUser = (req, res, next) => {
-/*     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
-    const tokenUserUuid = decodedToken.userUuid;
- */
     user.findOne({ where: { uuid: req.body.userUuid }})
         .then((user) =>
             bcrypt.hash(req.body.password, 10)
@@ -64,10 +59,6 @@ exports.modifyUser = (req, res, next) => {
 }
 
  exports.delete = (req, res, next) => {
-/*     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
-    const tokenUserUuid = decodedToken.userUuid;
- */
     user.findOne({ where: { uuid: req.body.userUuid }})
         .then((user) => 
             user.destroy()
@@ -77,4 +68,3 @@ exports.modifyUser = (req, res, next) => {
         .catch(error => res.status(403).json({ error: 'Unauthorized request !' }))
 }
 
-//ajouter route gestion de page user.findOne({ where: {{ uuid: req.body.uuid })

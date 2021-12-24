@@ -51,10 +51,9 @@ exports.deleteComment = (req, res, next) => {
         })
         .catch(error => res.status(400).json({ error }));
 }
-/* 
+ 
 exports.allComments = (req, res, next) => {
-    post.findOne({ where: { uuid: req.params.uuid }}) //include comments
+    post.findOne({ where: { uuid: req.params.postuuid }, include: [{ all: true, nested: true}] })
         .then((post) => res.json(post))
         .catch(error => res.status(400).json({ error }));
 }
- */
