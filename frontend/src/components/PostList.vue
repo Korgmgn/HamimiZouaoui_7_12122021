@@ -1,6 +1,6 @@
 <template>
     <Account v-if="modalAccount" @close="showAccount" />
-    <NewPost v-if="modalNewPost" @close="showNewPost" />
+    <NewPost v-if="modalNewPost" @close="showNewPost" @refresh="getAllPosts" />
     <NewComment :postuuid="postuuid" v-if="modalNewComment" @close="showNewComment" />
     <PostComments :postuuid="postuuid" v-if="modalPostComments" @close="showPostComments" />
         <h2>Liste des messages</h2>
@@ -68,25 +68,20 @@ export default {
         },
         showUserPosts() {
             
-        }
-    },
-    created() {
-        const getAllPosts = async () => {
-            try{
-                const response = await axios.get('http://localhost:3000/posts/allposts', {
+        },
+        getAllPosts() {
+                axios.get('http://localhost:3000/posts/allposts', {
                     headers: {
                         Authorization: 'Bearer ' + localStorage.getItem('token')
                     }
                 })
-                console.log(response.data)
-                this.posts = await response.data
-            } catch (error) {
-                console.log(error)
-            }
+                .then((res) => this.posts = res.data)
+                .catch((error) => console.log(error))
         }
-        getAllPosts()
+    },
+    created() {
+        this.getAllPosts()
     }
-
 }
 </script>
 

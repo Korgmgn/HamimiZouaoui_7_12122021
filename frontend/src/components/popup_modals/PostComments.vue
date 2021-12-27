@@ -4,9 +4,9 @@
             <div class="close-modal"  @click="closeModal">X</div>
             <h2>Commentaires:</h2>
             <div class="posts-box">
-                <div class="post-bloc" v-for="post in post" :key="post.comments.uuid">
-                    <span class="username">{{ comment.user.username }}</span>
-                    <p class="post">{{ comment }}</p>
+                <div class="post-bloc" v-for="comment in comments" :key="comment.uuid">
+                    <span class="username"></span>
+                    <p class="post">{{comment.content}}</p>
                 </div>
             </div>
         </div>
@@ -20,7 +20,7 @@ export default {
     props: ['postuuid', 'username'],
     data(){
         return {
-            post: []
+            comments: []
         }
     },
     methods: {
@@ -36,14 +36,15 @@ export default {
                         Authorization: 'Bearer ' + localStorage.getItem('token')
                     }
                 })
-                console.log(response.data)
-                this.post = await response.data
+                console.log(response.data.comments)
+                this.comments = await response.data.comments
             } catch (error) {
                 console.log(error)
             }
         }
         getPostComments()
     }
+    //updated
 }
 </script>
 

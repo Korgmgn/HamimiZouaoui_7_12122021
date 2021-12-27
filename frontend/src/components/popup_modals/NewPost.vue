@@ -27,6 +27,9 @@ export default {
         closeModal() {
             this.$emit('close')
         },
+        refreshPosts(){
+            this.$emit('refresh')
+        },
 
         async handleNewPost() {
             await axios.post('http://localhost:3000/posts/create', {
@@ -38,6 +41,7 @@ export default {
             }})
             this.content = ''
             this.confirmNewpost = 'Message envoyé !'
+            this.refreshPosts()
         }
     }
 }
