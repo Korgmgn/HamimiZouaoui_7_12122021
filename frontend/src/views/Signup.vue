@@ -5,7 +5,7 @@
         <form @submit.prevent="handleSignup" class="signup-form" action="submit">
             <h2>Créez un compte:</h2>
 
-            <div class="username">
+            <div class="username-input">
                 <label for="username">Nom d'utilisateur: </label>
                 <input v-model="signupUsername" type="text" name="username" required>
             </div>

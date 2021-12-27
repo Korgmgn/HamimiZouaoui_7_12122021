@@ -37,7 +37,7 @@ export default {
             },
             {
             headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                    Authorization: `Bearer ${this.$store.state.token}`
             }})
             this.content = ''
             this.confirmNewcomment = 'Commentaire envoyé !'

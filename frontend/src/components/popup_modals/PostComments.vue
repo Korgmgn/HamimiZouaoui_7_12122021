@@ -34,7 +34,7 @@ export default {
             try{
                 const response = await axios.get(`http://localhost:3000/comments/allcomments/${this.postuuid}`, {
                     headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                        Authorization: `Bearer ${this.$store.state.token}`
                     }
                 })
                 console.log(response.data.comments)

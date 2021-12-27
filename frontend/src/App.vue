@@ -58,12 +58,17 @@ h2 {
     left: 0;
     background: rgba(128, 128, 128, 0.233);
 }
-form, .login, .username, .password, .email {
+form, .login, .username-input, .password, .email {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
     padding: 10px 0 10px 0;
+}
+.username {
+    width: fit-content;
+    display: inline-block;
+    align-self: center;
 }
 .close-modal {
     height: 20px;

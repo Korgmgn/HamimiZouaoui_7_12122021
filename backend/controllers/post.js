@@ -53,7 +53,7 @@ exports.getAllPosts = (req, res, next) => {
 
 exports.userPosts = (req, res, next) => {
     user.findOne({ where: { uuid: req.params.useruuid }, include: [{ all: true }] })
-        .then((posts) => res.json(posts))
+        .then((user) => res.json(user))
         .catch(error => res.status(400).json({ error }));
 }
 

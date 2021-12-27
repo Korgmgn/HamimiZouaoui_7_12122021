@@ -4,7 +4,7 @@
         <router-link to="/signup">Inscription</router-link>
         <form @submit.prevent="handleLogin" class="login-form" action="submit">
             <h2>Connexion</h2>
-            <div class="username">
+            <div class="username-input">
                 <label for="username">Nom d'utilisateur: </label>
                 <input v-model="loginUsername" type="text" name="username" required>
             </div>
@@ -40,7 +40,9 @@ export default {
                     password: this.loginPassword
                 })
                 
-                localStorage.setItem('token', response.data.token);
+                this.$store.state.token = response.data.token
+                this.$store.state.userUuid = response.data.userUuid
+                console.log(this.$store.state.userUuid)
                 this.$router.push('/home')
             
             } catch (error) {

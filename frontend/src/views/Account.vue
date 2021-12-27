@@ -42,7 +42,7 @@ export default {
             try {
                 await axios.delete('http://localhost:3000/users/delete', {
                     headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                        Authorization: `Bearer ${this.$store.state.token}`
                     }
                 })
                 this.$router.push('/')
@@ -60,7 +60,7 @@ export default {
                     },
                     {
                     headers: {
-                            Authorization: 'Bearer ' + localStorage.getItem('token')
+                            Authorization: `Bearer ${this.$store.state.token}`
                     }})
                 this.username = ''
                 this.email = ''

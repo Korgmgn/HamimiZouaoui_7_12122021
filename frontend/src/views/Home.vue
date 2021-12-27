@@ -11,7 +11,9 @@
                 <p>Aucun message !</p>
             </div>
             <div class="text-bloc" v-for="post in posts" :key="post.uuid" :data-post-uuid="post.uuid">
-                <span class="username" :data-user-uuid="post.user.uuid" @click="showUserPosts">{{ post.user.username }}</span>
+                <router-link :to="{ name: 'UserPosts', params: { useruuid: post.user.uuid } }" class="username">
+                    <span>{{ post.user.username }}</span>
+                </router-link>
                 <p class="text">{{ post.content }}</p>
                 <div class="comment-section">
                     <button @click="showNewComment">Commenter</button>
@@ -62,7 +64,7 @@ export default {
             try {
                 const response = await axios.get('http://localhost:3000/posts/allposts', {
                     headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                        Authorization: `Bearer ${this.$store.state.token}`
                     }
                 })
                 console.log(response.data)
