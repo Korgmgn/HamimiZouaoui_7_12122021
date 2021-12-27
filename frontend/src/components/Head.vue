@@ -18,6 +18,7 @@ export default {
     justify-content: center;
     align-items: center;
     height: 150px;
+    width: 100%;
     margin: 0 auto 0 auto;
     background: rgb(255,255,255);
     background: linear-gradient(180deg, rgb(0, 140, 255) 0%, rgba(135,206,250,1) 75%);
