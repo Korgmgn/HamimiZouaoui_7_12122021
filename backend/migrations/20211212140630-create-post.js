@@ -16,6 +16,9 @@ module.exports = {
                 type: DataTypes.STRING,
                 allowNull: false
             },
+            image: {
+                type: DataTypes.STRING
+            },
             userId: {
                 type: DataTypes.INTEGER,
                 allowNull: false

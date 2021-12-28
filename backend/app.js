@@ -28,10 +28,10 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
-
+app.use(express.json());
 app.use(bodyParser.json());
-
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/comments', commentRoutes);

@@ -3,17 +3,48 @@ const fs = require('fs');
 const { sequelize, user, post, comment } = require('../models/index');
 const { all } = require('sequelize/dist/lib/operators');
 
-exports.createPost = (req, res, next) => {
+/* exports.createPost = (req, res, next) => {
+    const text = req.body.text
+
     user.findOne({ where: { uuid: req.body.userUuid }})
         .then((user) => {
-            const newPost = { content: req.body.content, userId: user.id };
+            let imageUrl = ""
+            if (req.file) { imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}` }
+            const newPost = new post(
+                {
+                    userId: user.id,
+                    content: req.body.content,
+                    image: imageUrl
+                }
+            )
+        
             console.log(newPost)        
             
             post.create(newPost) //utiliser include + voir discord
                 .then((newPost) => res.json(newPost))
                 .catch(error => res.status(400).json({ error }));
         })
-}
+} */
+
+exports.createPost = (req, res, next) => {
+    
+    console.log(req.file)
+    user.findOne({ where: { uuid: req.body.userUuid }})
+        .then((user) => {
+            console.log('La requete: ', req.body)
+                const newPost = db.post.build({ 
+                    content: req.body.content, 
+                    userId: user.id,
+                    image: req.file ? `${req.protocol}://${req.get("host")}/images/${req.file.filename}` : req.body.image
+                });
+                //console.log(newPost)        
+                
+                post.save(newPost) //utiliser include + voir discord
+                    .then((newPost) => res.json(newPost))
+                    .catch(error => res.status(400).json({ error }));
+        })
+        .catch(error => res.status(400).json({ error: 'Errur dans le .findOne' }));
+    }
 
 //Uuid du post dans req.params.id
 exports.modifyPost = (req, res, next) => {

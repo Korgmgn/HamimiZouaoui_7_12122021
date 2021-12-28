@@ -30,6 +30,9 @@ module.exports = (sequelize, DataTypes) => {
             notNull: { msg: 'Post cannot be null' },
             notEmpty: { msg: 'Post cannot be empty' },
         }
+    },
+    image: {
+        type: DataTypes.STRING
     }
   }, {
     sequelize,

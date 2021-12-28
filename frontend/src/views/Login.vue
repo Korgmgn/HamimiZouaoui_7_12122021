@@ -21,6 +21,7 @@
 <script>
 import axios from 'axios'
 import Head from '../components/Head.vue'
+//import { mapActions } from 'vuex'
 
 export default {
     name: 'Login',
@@ -33,6 +34,14 @@ export default {
         }
     },
     methods: {
+/*         
+        ...mapActions({ 
+            'login'
+        }),
+        submit() {
+            this.login(this.form)
+        }
+ */        
         async handleLogin() {
             try{
                 const response = await axios.post('http://localhost:3000/users/login', {
@@ -41,8 +50,9 @@ export default {
                 })
                 
                 this.$store.state.token = response.data.token
+                this.$store.state.isAdmin = response.data.isAdmin
                 this.$store.state.userUuid = response.data.userUuid
-                console.log(this.$store.state.userUuid)
+                console.log('Le token: ', this.$store.state.token, 'Statut: ', this.$store.state.isAdmin)
                 this.$router.push('/home')
             
             } catch (error) {

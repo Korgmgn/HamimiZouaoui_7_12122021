@@ -1,16 +1,24 @@
 import { createStore } from 'vuex'
 
 export default createStore({
-  state: {
-      token: null,
-      userUuid: null,
-      userRole: null,
-      userName: null
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
+    //namespaced: true,
+    state: {
+        token: null,
+        isAdmin: null,
+        userUuid: null,
+        userName: null
+    },
+    mutations: {
+    },
+    actions: {
+/* 
+        async login ({ dispatch }, credentials) {
+            let response = await axios.post('http://localhost:3000/users/login', credentials)
+
+            console.log(response.data)
+        }
+*/    
+    },
+    modules: {
+    }
 })

@@ -8,7 +8,8 @@ module.exports = (req, res, next) => {
         if(req.body.userUuid && req.body.userUuid !== userUuid) {
             throw 'User ID non valable !';
         } else {
-            req.body.userUuid = userUuid;
+            //req.body.userUuid = userUuid;
+            //console.log('Ajouté par auth.js: ', req.body.userUuid)
             next()
         }
     } catch (error) {
