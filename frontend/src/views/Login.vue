@@ -34,14 +34,6 @@ export default {
         }
     },
     methods: {
-/*         
-        ...mapActions({ 
-            'login'
-        }),
-        submit() {
-            this.login(this.form)
-        }
- */        
         async handleLogin() {
             try{
                 const response = await axios.post('http://localhost:3000/users/login', {
@@ -49,10 +41,14 @@ export default {
                     password: this.loginPassword
                 })
                 
-                this.$store.state.token = response.data.token
-                this.$store.state.isAdmin = response.data.isAdmin
-                this.$store.state.userUuid = response.data.userUuid
-                console.log('Le token: ', this.$store.state.token, 'Statut: ', this.$store.state.isAdmin)
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('userUuid', response.data.userUuid);
+                localStorage.setItem('isAdmin', response.data.isAdmin);
+
+                // this.$store.state.token = response.data.token
+                // this.$store.state.isAdmin = response.data.isAdmin
+                // this.$store.state.userUuid = response.data.userUuid
+                // console.log('Le token: ', this.$store.state.token, 'Statut: ', this.$store.state.isAdmin)
                 this.$router.push('/home')
             
             } catch (error) {

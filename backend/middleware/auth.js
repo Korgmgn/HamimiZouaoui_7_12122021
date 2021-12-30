@@ -5,11 +5,14 @@ module.exports = (req, res, next) => {
         const token = req.headers.authorization.split(' ')[1];
         const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
         const userUuid = decodedToken.userUuid;
+        const adminStatus = decodedToken.isAdmin;
+        
         if(req.body.userUuid && req.body.userUuid !== userUuid) {
             throw 'User ID non valable !';
         } else {
-            //req.body.userUuid = userUuid;
-            //console.log('Ajouté par auth.js: ', req.body.userUuid)
+            req.body.userUuid = userUuid;
+            req.body.isAdmin = adminStatus;
+            // console.log( adminStatus, 'Coucou, je suis auth.js, voici le adminStatus: ', req.body.isAdmin)
             next()
         }
     } catch (error) {

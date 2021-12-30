@@ -24,12 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.UUIDV4
     },
     content: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            notNull: { msg: 'Post cannot be null' },
-            notEmpty: { msg: 'Post cannot be empty' },
-        }
+        type: DataTypes.STRING
     },
     image: {
         type: DataTypes.STRING

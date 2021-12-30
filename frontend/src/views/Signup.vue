@@ -54,7 +54,7 @@ export default {
                 this.signupSuccess = 'Compte créé !'
 
             } catch (error) {
-                this.signupError = 'Un erreur est survenu'
+                this.signupError = 'Une erreur est survenu'
             }
         }
     }

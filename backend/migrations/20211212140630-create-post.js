@@ -13,8 +13,7 @@ module.exports = {
                 defaultValue: DataTypes.UUIDV4
             },
             content: {
-                type: DataTypes.STRING,
-                allowNull: false
+                type: DataTypes.STRING
             },
             image: {
                 type: DataTypes.STRING

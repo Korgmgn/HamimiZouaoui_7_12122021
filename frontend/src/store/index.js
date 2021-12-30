@@ -1,7 +1,8 @@
 import { createStore } from 'vuex'
+//import createPersistedState from "vuex-persistedstate"
 
 export default createStore({
-    //namespaced: true,
+    //plugins: [createPersistedState()]
     state: {
         token: null,
         isAdmin: null,
@@ -11,14 +12,7 @@ export default createStore({
     mutations: {
     },
     actions: {
-/* 
-        async login ({ dispatch }, credentials) {
-            let response = await axios.post('http://localhost:3000/users/login', credentials)
-
-            console.log(response.data)
-        }
-*/    
     },
     modules: {
-    }
+    },
 })

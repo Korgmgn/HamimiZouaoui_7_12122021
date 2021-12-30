@@ -2,13 +2,13 @@
     <div class="backdrop">
         <div class="main-box">
             <div class="close-modal"  @click="closeModal">X</div>
-            <h2>Votre nouveau message</h2>
-            <form @submit.prevent="handleNewPost" action="submit" enctype="multipart/form-data">
+            <h2>Modifier le message:</h2>
+            <form @submit.prevent="handleModifyPost" action="submit" enctype="multipart/form-data">
                 <textarea v-model="content" class="text-input" type="text" />
                 <input type="file" @change="onFileSelect" accept="image/*">
-                <p v-if="confirmNewpost">{{ confirmNewpost }}</p>
-                <p v-if="errorNewpost">{{ errorNewpost }}</p>
-                <button>Envoyer</button>
+                <p v-if="confirmModifyPost">{{ confirmModifyPost }}</p>
+                <p v-if="errorModifyPost">{{ errorModifyPost }}</p>
+                <button>Modifier</button>
             </form>
         </div>
     </div>
@@ -18,13 +18,14 @@
 import axios from 'axios'
 
 export default {
+    props: ['postUuid'],
     data() {
         return {
             content: '',
             imagePreview: '',
             imageUrl: '',
-            confirmNewpost: null,
-            errorNewpost: null
+            confirmModifyPost: null,
+            errorModifyPost: null
         }
     },
     methods: {
@@ -35,18 +36,19 @@ export default {
             this.$emit('refresh')
         },
         onFileSelect(event) {
-                this.imageURL = event.target.files[0];
-                console.log(this.imageURL)
-                this.imagePreview = URL.createObjectURL(this.imageURL);
+            this.imageURL = event.target.files[0];
+            console.log(this.imageURL)
+            this.imagePreview = URL.createObjectURL(this.imageURL);
         },  
 
-        async handleNewPost() {
+        async handleModifyPost() {
+            console.log(this.postUuid)
             if(this.content || this.imageURL) {
                 const formData = new FormData();
                 formData.append("content", this.content);
                 formData.append("image", this.imageURL);
                 formData.append("userUuid", localStorage.getItem('userUuid'))
-                await axios.post('http://localhost:3000/posts/create', formData, {
+                await axios.put(`http://localhost:3000/posts/modify/${this.postUuid}`, formData, {
                     headers: {
                         'Content-type': 'multipart/form-data',
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -55,13 +57,17 @@ export default {
                 this.content = ''
                 this.imagePreview = ''
                 this.imageURL = ''
-                this.confirmNewpost = 'Message envoyé !'
+                this.confirmModifyPost = 'Message modifié !'
                 this.refreshPosts()
             } else {
-                this.errorNewpost = 'Ajouter du texte, ou une image !'
+                this.errorModifyPost = 'Ajouter du texte, ou une image !'
             }
         }
     }
 }
+
 </script>
 
+<style>
+
+</style>

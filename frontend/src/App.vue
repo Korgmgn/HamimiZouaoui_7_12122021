@@ -44,7 +44,7 @@ h2 {
     border: 1px solid black;
     border-radius: 25px;
     box-shadow: 5px 5px 10px lightgrey;
-    padding: 10px 5px 20px 5px;
+    padding: 10px 2px 20px 5px;
     margin: 25px;
 }
 .backdrop {
@@ -65,9 +65,15 @@ form, .login, .username-input, .password, .email {
     align-items: center;
     padding: 10px 0 10px 0;
 }
+.upper-text-bloc {
+    display: flex;
+    justify-content: end;
+}
+.username a {
+    text-decoration: none;
+}
 .username {
-    width: fit-content;
-    display: inline-block;
+    flex: 2;
     align-self: center;
 }
 .close-modal {
@@ -82,9 +88,16 @@ form, .login, .username-input, .password, .email {
     cursor: pointer;
 }
 .text-box{
-    max-height: 600px;
+    max-height: 100vh;
     overflow-y: scroll;
     margin: 15px 0 0 0;
+}
+img {
+    max-height: 200px;
+    width: fit-content;
+    margin: 20px;
+    align-self: center;
+
 }
 .text {
     display: inline-block;
@@ -99,6 +112,10 @@ form, .login, .username-input, .password, .email {
 .text-bloc {
     display: flex;
     flex-direction: column;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px 0 5px 0;
+    margin: 5px 0 5px 0;
 }
 .text-input {
     width: 90%;
@@ -118,8 +135,8 @@ button {
     color: darkblue;
     background: lightskyblue;
     border: solid 1px black;
-    padding: 10px 15px;
-    margin: 10px;
+    padding: 5px 10px;
+    margin: 8px;
     border-radius: 20px;
     box-shadow: 0px 2px 6px darkblue;
     cursor: pointer;
@@ -130,7 +147,7 @@ button:active {
 }
 
 ::-webkit-scrollbar{
-    width: 5px;
+    width: 3px;
 }
 ::-webkit-scrollbar-thumb {
     border-radius: 5px;

@@ -16,10 +16,7 @@
 export default {
     methods: {
         logout() {
-            this.$store.state.token = null,
-            this.$store.state.userUuid = null,
-            this.$store.state.userRole = null
-            console.log(this.$store.state.token)
+            localStorage.clear()
         }
     }
 }
