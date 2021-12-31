@@ -44,28 +44,39 @@ exports.login = (req, res, next) => {
 
 exports.modifyUser = (req, res, next) => {
     user.findOne({ where: { uuid: req.body.userUuid }})
-        .then((user) =>
-            bcrypt.hash(req.body.password, 10)
-                .then((hash) => {
-                    user.username = req.body.username
-                    user.email = req.body.email
-                    user.password = hash
-                    
-                    user.save()
-                        .then(() => res.status(200).json({ message: 'Objet modifié !'}))
-                        .catch(error => res.status(400).json({ error }));
-                })
-        )
+        .then((user) => {
+            if(req.body.password) {
+                bcrypt.hash(req.body.password, 10)
+                    .then((hash) => {
+                        user.username = req.body.username
+                        user.email = req.body.email
+                        user.password = hash
+                        
+                        user.save()
+                            .then(() => res.status(200).json({ message: 'Objet modifié !'}))
+                            .catch(error => res.status(400).json({ error }));
+                    })
+            } else {
+                return res.status(400).json({ error })
+            }
+        })
         .catch(error => res.status(400).json({ error }))
 }
 
  exports.delete = (req, res, next) => {
-    user.findOne({ where: { uuid: req.body.userUuid }})
+    user.findOne({ where: { uuid: req.body.userUuid }, include: [{ all: true }] })
         .then((user) => 
-            user.destroy()
-                .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
-                .catch(error => res.status(400).json({ error }))
+            //fs.unlink(`images/${filename}`, () => {
+                user.destroy()
+                    .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
+                    .catch(error => res.status(400).json({ error }))
+            //})
         )
         .catch(error => res.status(403).json({ error: 'Unauthorized request !' }))
 }
 
+exports.userAccount = (req, res, next) => {
+    user.findOne({ where: { uuid: req.body.userUuid }})
+        .then((user) => res.json(user))
+        .catch(error => res.status(400).json({ error }))
+}

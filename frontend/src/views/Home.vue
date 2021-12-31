@@ -12,13 +12,15 @@
             </div>
             <div class="text-bloc" v-for="post in posts" :key="post.uuid" :data-post-uuid="post.uuid">
                 <div class="upper-text-bloc" :data-user-uuid="post.user.uuid">
+                    <!-- <span>Posté le {{ timestampFormat(post.createdAt) }}</span>
+                    <span v-if="post.createdAt !== post.updatedAt">Modifié le {{ timestampFormat(post.updatedAt) }}</span> -->
                     <span class="username">
                         <router-link :to="{ name: 'UserPosts', params: { useruuid: post.user.uuid } }" >
                             {{ post.user.username }}
                         </router-link>
                     </span>
                     <div v-if="currentUserStatus == true || currentUserUuid == post.user.uuid">
-                        <button class="modify-post" @click="showModificationModal">M</button>
+                        <button class="modify-post" @click="checkUserBeforeModify">M</button>
                         <button class="delete-post" @click="checkUserBeforeDelete">X</button>
                     </div>
                 </div>
@@ -37,6 +39,7 @@
 
 <script>
 import axios from 'axios'
+//import moment from 'vue-moment'
 import Head from '../components/Head.vue'
 import Navigation from '../components/Navigation.vue'
 import NewPost from '../components/popup_modals/NewPost.vue'
@@ -68,10 +71,18 @@ export default {
             }
             console.log(this.postUuid)
         },
-        showModificationModal() {
+        showModificationModal(eventTarget) {
             this.modalModifyPost = !this.modalModifyPost
             if(this.modalModifyPost == true) {
                 this.postUuid = event.target.closest('div.text-bloc').getAttribute('data-post-uuid')
+            }
+        },
+        checkUserBeforeModify() {
+            const postUserUuid = event.target.closest('div.upper-text-bloc').getAttribute('data-user-uuid')
+            if(postUserUuid == this.currentUserUuid || this.currentUserStatus) {
+                this.showModificationModal(event.target)
+            } else {
+                console.log('Vous ne pouvez pas modifier ce post !')
             }
         },
         checkUserBeforeDelete() {
@@ -111,6 +122,11 @@ export default {
                 console.log(error)
             }
         }
+        // timestampFormat(timestamp){
+        //         if (timestamp) {
+        //             return moment(String(timestamp)).format('DD/MM/YYYY')
+        //         }
+        // },
     },
     created() {
         this.getAllPosts()

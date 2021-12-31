@@ -80,6 +80,25 @@ export default {
                 this.commentUuid = event.target.closest('div.text-bloc').getAttribute('data-comment-uuid')
             }
         },
+        checkUserBeforeModify() {
+            const postUserUuid = event.target.closest('div.upper-text-bloc').getAttribute('data-user-uuid')
+            const commentUserUuid = event.target.closest('div.upper-text-bloc').getAttribute('data-user-uuid')
+            if(postUserUuid && !commentUserUuid) {
+                if(postUserUuid == this.currentUserUuid || this.currentUserStatus) {
+                    this.showPostModificationModal(event.target)
+                } else {
+                    console.log('Vous ne pouvez pas modifier ce post !')
+                }
+            } else if (!postUserUuid && commentUserUuid) {
+                if(commentUserUuid == this.currentUserUuid || this.currentUserStatus) {
+                    this.showCommentModificationModal(event.target)
+                } else {
+                    console.log('Vous ne pouvez pas modifier ce post !')
+                }
+            } else {
+                console.log('Vous ne pouvez pas changer ou supprimer ce message !')
+            }
+        },
         checkUserBeforeDelete() {
             this.userUuid = event.target.closest('div.upper-text-bloc').getAttribute('data-user-uuid')
             if(this.userUuid == this.currentUserUuid || this.currentUserStatus == true) {

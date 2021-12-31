@@ -15,7 +15,7 @@
             </div>
             <div class="password">
                 <label for="password">Mot de passe: </label>
-                <input v-model="signupPassword" type="text" name="password" required>
+                <input v-model="signupPassword" type="password" name="password" required>
             </div>
             <button>S'inscrire</button>
             <p v-if="signupSuccess">{{ signupSuccess }}</p>

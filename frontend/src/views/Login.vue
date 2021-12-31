@@ -10,7 +10,7 @@
             </div>
             <div class="password">
                 <label for="password">Mot de passe: </label>
-                <input v-model="loginPassword" type="text" name="password" required>
+                <input v-model="loginPassword" type="password" name="password" required>
             </div>
             <button>Se connecter</button>
             <p v-if="loginError">{{ loginError }}</p>

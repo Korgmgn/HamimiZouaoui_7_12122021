@@ -20,7 +20,8 @@ module.exports = {
             },
             userId: {
                 type: DataTypes.INTEGER,
-                allowNull: false
+                allowNull: false,
+                onDelete: 'CASCADE',
             },
             createdAt: {
                 allowNull: false,

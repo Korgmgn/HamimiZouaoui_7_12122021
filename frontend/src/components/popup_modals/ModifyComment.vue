@@ -2,7 +2,7 @@
     <div class="backdrop">
         <div class="main-box">
             <div class="close-modal"  @click="closeModal">X</div>
-            <h2>Commentaire:</h2>
+            <h2>Modifiez votre commentaire:</h2>
             <form @submit.prevent="handleModifyComment" action="submit">
                 <input v-model="content" class="text-input" type="text">
                 <p v-if="confirmModifyComment">{{ confirmModifyComment }}</p>

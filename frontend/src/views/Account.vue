@@ -3,18 +3,24 @@
     <Navigation />
     <div class="main-box">
         <h2>Gestion du compte</h2>
-        <form @submit.prevent="handleAccountChange" action="submit">
+        <div class="account-info" v-if="!modifyAccount">
+            <p>Votre nom d'utilisateur: {{ user.username }}</p>
+            <p>Votre email: {{ user.email }} </p>
+        </div>
+        <form class="login-form" @submit.prevent="handleAccountChange" action="submit" v-else>
             <label for="username">Nouveau nom d'utilisateur: </label>
             <input v-model="username" class="post-form" name="username" type="text" required>
             <label for="email">Nouvel email: </label>
             <input v-model="email" class="post-form" name="email" type="text" required>
-            <label for="password">Nouveau mot de passe: </label>
-            <input v-model="password" class="post-form" name="password" type="text" required>
+            <label for="password">Confirmez ou changez votre mot de passe: </label>
+            <input v-model="password" class="post-form" name="password" type="password" required>
             <button>Soumettre</button>
             <p v-if="confirmChange">{{ confirmChange }}</p>
             <p v-if="errorChange">{{ errorChange }}</p>
         </form>
-        <button class="delete-button" @click="handleAccountDelete">Supprimer le compte</button>
+        <button class="account-button" @click="allowChanges">Changez vos infos</button>
+        <br>
+        <button class="account-button" @click="handleAccountDelete">Supprimez le compte</button>
         <p v-if="errorDelete">{{ errorDelete }}</p>
     </div>
 </template>
@@ -29,15 +35,32 @@ export default {
     components: { Head, Navigation },
     data() {
         return {
+            user: [],
             username: '',
             email: '',
             password: '',
+            modifyAccount: false,
             confirmChange: null,
             errorChange: null,
             errorDelete: null,
         }
     },
     methods: {
+        allowChanges() {
+            this.modifyAccount = !this.modifyAccount
+        },
+        async getAccount() {
+            const response = await axios.get('http://localhost:3000/users/account', {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                }
+            })
+            console.log(response.data)
+            this.user = response.data
+            this.username = response.data.username
+            this.email = response.data.email
+        },
+
         async handleAccountDelete() {
             try {
                 await axios.delete('http://localhost:3000/users/delete', {
@@ -70,12 +93,18 @@ export default {
                 this.errorChange = 'Modification échouée !'
             }
         }
+    },
+    created(){
+        this.getAccount()
     }
 }
 </script>
 
 <style scoped>
-button.delete-button {
+button.account-button {
     align-self: center;
+}
+.account-info p {
+    padding: 5px;
 }
 </style>

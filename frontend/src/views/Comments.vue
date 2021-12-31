@@ -16,7 +16,7 @@
                             </router-link>
                         </span>
                         <div v-if="currentUserStatus == true || currentUserUuid == comment.user.uuid">
-                            <button class="modify-post" @click="showModificationModal">M</button>
+                            <button class="modify-post" @click="checkUserBeforeModify">M</button>
                             <button class="delete-post" @click="checkUserBeforeDelete">X</button>
                         </div>  
                     </div>
@@ -45,10 +45,18 @@ export default {
         }
     },
     methods: {
-        showModificationModal() {
+        showModificationModal(eventTarget) {
             this.modalModifyComment = !this.modalModifyComment
             if(this.modalModifyComment == true) {
                 this.commentUuid = event.target.closest('div.text-bloc').getAttribute('data-comment-uuid')
+            }
+        },
+        checkUserBeforeModify() {
+            const commentUserUuid = event.target.closest('div.upper-text-bloc').getAttribute('data-user-uuid')
+            if(commentUserUuid == this.currentUserUuid || this.currentUserStatus) {
+                this.showModificationModal(event.target)
+            } else {
+                console.log('Vous ne pouvez pas modifier ce post !')
             }
         },
         checkUserBeforeDelete() {

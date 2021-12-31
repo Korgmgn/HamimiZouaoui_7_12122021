@@ -27,12 +27,15 @@ exports.modifyPost = (req, res, next) => {
     post.findOne({ where: { uuid: req.params.postUuid }, include: user})
         .then((post) => {
             console.log(req.body.userUuid, req.body.isAdmin)
-            if(req.body.userUuid == post.user.uuid || req.body.isAdmin){
-                if(req.body.content) { post.content = req.body.content }
-                if(req.file) { post.image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}` }
-                post.save()
-                    .then(() => res.status(200).json({ message: 'Message modifié !'}))
-                    .catch(error => res.status(400).json({ error }));
+            if(req.body.userUuid == post.user.uuid || req.body.isAdmin) {
+                const filename = post.image.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => {
+                    if(req.body.content) { post.content = req.body.content }
+                    if(req.file) { post.image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}` }
+                    post.save()
+                        .then(() => res.status(200).json({ message: 'Message modifié !'}))
+                        .catch(error => res.status(400).json({ error }));
+                })
             } else {
                 res.status(403).json({ message: 'Unauthorized request !' })
             }
@@ -44,9 +47,12 @@ exports.deletePost = (req, res, next) => {
     post.findOne({ where: { uuid: req.params.postUuid }, include: user})
         .then((post) => {
             if(req.body.userUuid == post.user.uuid || req.body.isAdmin){
-                post.destroy()
-                    .then(() => res.status(200).json({ message: 'Message supprimé !'}))
-                    .catch(error => res.status(400).json({ error }));
+                const filename = post.image.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => {
+                    post.destroy()
+                        .then(() => res.status(200).json({ message: 'Message supprimé !'}))
+                        .catch(error => res.status(400).json({ error }));
+                })
             } else {
                 res.status(403).json({ message: 'Unauthorized request !' })
             }
