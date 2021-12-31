@@ -48,6 +48,7 @@ export default {
                 formData.append("content", this.content);
                 formData.append("image", this.imageURL);
                 formData.append("userUuid", localStorage.getItem('userUuid'))
+                formData.append("isAdmin", localStorage.getItem('isAdmin'))
                 await axios.put(`http://localhost:3000/posts/modify/${this.postUuid}`, formData, {
                     headers: {
                         'Content-type': 'multipart/form-data',
@@ -60,7 +61,7 @@ export default {
                 this.confirmModifyPost = 'Message modifié !'
                 this.refreshPosts()
             } else {
-                this.errorModifyPost = 'Ajouter du texte, ou une image !'
+                this.errorModifyPost = 'Ajoutez du texte, ou une image !'
             }
         }
     }

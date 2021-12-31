@@ -1,7 +1,8 @@
 <template>
-      <div class="backdrop">
+    <Head />
+    <Navigation />
+    <ModifyComment :commentUuid="commentUuid" v-if="modalModifyComment" @close="showModificationModal" @refresh="getPostComments" />
         <div class="main-box">
-            <div class="close-modal"  @click="closeModal">X</div>
             <h2>Commentaires:</h2>
             <div class="text-box">
                 <div class="text-bloc" v-if="!comments.length">
@@ -14,30 +15,41 @@
                                 {{ comment.user.username }}
                             </router-link>
                         </span>
-                         <button class="delete-post" @click="checkUserBeforeDelete" v-if="currentUserUuid == comment.user.uuid || currentUserStatus == true">X</button>
+                        <div v-if="currentUserStatus == true || currentUserUuid == comment.user.uuid">
+                            <button class="modify-post" @click="showModificationModal">M</button>
+                            <button class="delete-post" @click="checkUserBeforeDelete">X</button>
+                        </div>  
                     </div>
                     <p class="text">{{comment.content}}</p>
                 </div>
             </div>
         </div>
-    </div>
 </template>
 
 <script>
 import axios from 'axios'
+import Head from '../components/Head.vue'
+import Navigation from '../components/Navigation.vue'
+import ModifyComment from '../components/popup_modals/ModifyComment.vue'
 
 export default {
-    props: ['postUuid'],
+    name: 'Comments',
+    components: { Head, Navigation, ModifyComment },
     data(){
         return {
             currentUserUuid: null,
             currentUserStatus: null,
+            modalModifyComment: false,
+            commentUuid: null,
             comments: []
         }
     },
     methods: {
-        closeModal() {
-            this.$emit('close')
+        showModificationModal() {
+            this.modalModifyComment = !this.modalModifyComment
+            if(this.modalModifyComment == true) {
+                this.commentUuid = event.target.closest('div.text-bloc').getAttribute('data-comment-uuid')
+            }
         },
         checkUserBeforeDelete() {
             const commentUserUuid = event.target.closest('div.upper-text-bloc').getAttribute('data-user-uuid')
@@ -49,7 +61,7 @@ export default {
         },
         async getPostComments() {
             try{
-                const response = await axios.get(`http://localhost:3000/comments/allcomments/${this.postUuid}`, {
+                const response = await axios.get(`http://localhost:3000/comments/allcomments/${this.$route.params.postUuid}`, {
                     headers: {
                         Authorization: 'Bearer ' + localStorage.getItem('token')
                     }
@@ -57,6 +69,7 @@ export default {
                 this.comments = await response.data.comments
                 this.currentUserUuid = localStorage.getItem('userUuid')
                 this.currentUserStatus = localStorage.getItem('isAdmin')
+                if(this.modalModifyComment == true) { this.showModificationModal() }
             } catch (error) {
                 console.log(error)
             }

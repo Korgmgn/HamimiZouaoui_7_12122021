@@ -23,9 +23,9 @@ exports.createComment = (req, res, next) => {
 }
 
 exports.modifyComment = (req, res, next) => {
-    comment.findOne({ where: { uuid: req.params.uuid }, include: user})
+    comment.findOne({ where: { uuid: req.params.commentUuid }, include: user})
         .then((comment) => {
-            if(req.params.uuid == comment.user.uuid || req.body.isAdmin){
+            if(req.body.userUuid == comment.user.uuid || req.body.isAdmin){
                 comment.content = req.body.content
                 comment.save()
                     .then(() => res.status(200).json({ message: 'Message modifié !'}))

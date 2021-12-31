@@ -1,6 +1,8 @@
 <template>
     <Head />
     <Navigation />
+    <ModifyPost :postUuid="postUuid" v-if="modalModifyPost" @close="showPostModificationModal" @refresh="getUserPosts" />
+    <ModifyComment :commentUuid="commentUuid" v-if="modalModifyComment" @close="showCommentModificationModal" @refresh="getUserPosts" />
     <div class="main-box">
         <div class="text-box">
             <div class="text-bloc" v-if="!posts.length">
@@ -9,7 +11,10 @@
             <div class="text-bloc" v-for="post in posts" :key="post.uuid" :data-post-uuid="post.uuid">
                 <div class="upper-text-bloc" :data-user-uuid="userUuid">
                     <p class="username">{{ username }} a posté: </p>
-                    <button class="delete-post" @click="checkUserBeforeDelete" v-if="currentUserUuid == userUuid || currentUserStatus == true">X</button>
+                    <div v-if="currentUserStatus == true || currentUserUuid == userUuid">
+                        <button class="modify-post" @click="showPostModificationModal">M</button>
+                        <button class="delete-post" @click="checkUserBeforeDelete">X</button>
+                    </div>
                 </div>
                 <img :src="post.image" alt="Image envoyée par un utilisateur" v-if="post.image">
                 <p class="text" v-if="post.content">{{ post.content }}</p>
@@ -17,7 +22,10 @@
             <div class="text-bloc" v-for="comment in comments" :key="comment.uuid" :data-comment-uuid="comment.uuid">
                 <div class="upper-text-bloc" :data-user-uuid="userUuid">
                     <p class="username">{{ username }} a commenté: </p>
-                    <button class="delete-post" @click="checkUserBeforeDelete" v-if="currentUserUuid == userUuid || currentUserStatus == true">X</button>
+                    <div v-if="currentUserStatus == true || currentUserUuid == userUuid">
+                        <button class="modify-post" @click="showCommentModificationModal">M</button>
+                        <button class="delete-post" @click="checkUserBeforeDelete">X</button>
+                    </div>
                 </div>
                 <p class="text">{{comment.content}}</p>
             </div>
@@ -30,16 +38,23 @@
 import axios from 'axios'
 import Head from '../components/Head.vue'
 import Navigation from '../components/Navigation.vue'
+import ModifyPost from '../components/popup_modals/ModifyPost.vue'
+import ModifyComment from '../components/popup_modals/ModifyComment.vue'
+
 
 export default {
     name: 'UserPosts',
-    components: { Head, Navigation },
+    components: { Head, Navigation, ModifyPost, ModifyComment },
     data() {
         return {
             userUuid: null,
             username: null,
             currentUserUuid: null,
             currentUserStatus: null,
+            postUuid: null,
+            commentUuid: null,
+            modalModifyPost: false,
+            modalModifyComment: false,
             posts: [],
             comments: [],
             userPosts: false,
@@ -52,6 +67,18 @@ export default {
         },
         showComments() {
             this.userComments = !this.userComments
+        },
+        showPostModificationModal() {
+            this.modalModifyPost = !this.modalModifyPost
+            if(this.modalModifyPost == true) {
+                this.postUuid = event.target.closest('div.text-bloc').getAttribute('data-post-uuid')
+            }
+        },
+        showCommentModificationModal() {
+            this.modalModifyComment = !this.modalModifyComment
+            if(this.modalModifyComment == true) {
+                this.commentUuid = event.target.closest('div.text-bloc').getAttribute('data-comment-uuid')
+            }
         },
         checkUserBeforeDelete() {
             this.userUuid = event.target.closest('div.upper-text-bloc').getAttribute('data-user-uuid')

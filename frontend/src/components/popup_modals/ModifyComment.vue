@@ -3,10 +3,10 @@
         <div class="main-box">
             <div class="close-modal"  @click="closeModal">X</div>
             <h2>Commentaire:</h2>
-            <form @submit.prevent="handleNewComment" action="submit">
+            <form @submit.prevent="handleModifyComment" action="submit">
                 <input v-model="content" class="text-input" type="text">
-                <p v-if="confirmNewcomment">{{ confirmNewcomment }}</p>
-                <p v-if="errorNewcomment">{{ errorNewcomment }}</p>
+                <p v-if="confirmModifyComment">{{ confirmModifyComment }}</p>
+                <p v-if="errorModifyComment">{{ errorModifyComment }}</p>
                 <button>Envoyer</button>
             </form>
         </div>
@@ -17,26 +17,25 @@
 import axios from 'axios'
 
 export default {
+    props: ['commentUuid'],
     data() {
         return {
             content: '',
-            confirmNewcomment: null,
-            errorNewcomment: null
+            confirmModifyComment: null,
+            errorModifyComment: null
         }
     },
-    props: ['postUuid'],
     methods: {
         closeModal() {
             this.$emit('close')
         },
-        refreshPosts(){
+        refreshComments(){
             this.$emit('refresh')
         },
 
-        async handleNewComment() {
+        async handleModifyComment() {
             if(this.content) {
-                console.log(this.postUuid)
-                await axios.post(`http://localhost:3000/comments/create/${this.postUuid}`, {
+                await axios.put(`http://localhost:3000/comments/modify/${this.commentUuid}`, {
                     content: this.content
                 },
                 {
@@ -44,11 +43,11 @@ export default {
                     Authorization: 'Bearer ' + localStorage.getItem('token')
                 }})
                 this.content = ''
-                this.confirmNewcomment = 'Commentaire envoyé !'
-                this.refreshPosts()
+                this.confirmModifyComment = 'Commentaire modifié !'
+                this.refreshComments()
             } else {
-                this.errorNewcomment = "Commentaire vide !"
-            }
+                this.errorModifyComment = 'Ajoutez du texte !'
+            }  
         }
     }
 }

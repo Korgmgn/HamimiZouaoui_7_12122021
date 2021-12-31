@@ -26,6 +26,7 @@ exports.createPost = (req, res, next) => {
 exports.modifyPost = (req, res, next) => {
     post.findOne({ where: { uuid: req.params.postUuid }, include: user})
         .then((post) => {
+            console.log(req.body.userUuid, req.body.isAdmin)
             if(req.body.userUuid == post.user.uuid || req.body.isAdmin){
                 if(req.body.content) { post.content = req.body.content }
                 if(req.file) { post.image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}` }
