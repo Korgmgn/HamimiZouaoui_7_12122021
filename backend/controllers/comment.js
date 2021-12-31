@@ -39,7 +39,7 @@ exports.modifyComment = (req, res, next) => {
 }
 
 exports.deleteComment = (req, res, next) => {
-    console.log(req.body, req.params.commentUuid)
+    //console.log(req.body, req.params.commentUuid)
     comment.findOne({ where: { uuid: req.params.commentUuid }, include: user})
         .then((comment) => {
             if(req.body.userUuid == comment.user.uuid || req.body.isAdmin){
