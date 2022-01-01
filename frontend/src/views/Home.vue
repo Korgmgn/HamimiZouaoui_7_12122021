@@ -12,14 +12,14 @@
             </div>
             <div class="text-bloc" v-for="post in posts" :key="post.uuid" :data-post-uuid="post.uuid">
                 <div class="upper-text-bloc" :data-user-uuid="post.user.uuid">
-                    <!-- <span>Posté le {{ timestampFormat(post.createdAt) }}</span>
-                    <span v-if="post.createdAt !== post.updatedAt">Modifié le {{ timestampFormat(post.updatedAt) }}</span> -->
+                    <!-- <span>Posté le {{ moment(todaysDate).format("ddd MMM DD, YYYY [at] HH:mm a") }}</span> -->
+                    <!-- <span v-if="post.createdAt !== post.updatedAt">Modifié le {{ timestampFormat(post.updatedAt) }}</span> -->
                     <span class="username">
                         <router-link :to="{ name: 'UserPosts', params: { useruuid: post.user.uuid } }" >
                             {{ post.user.username }}
                         </router-link>
                     </span>
-                    <div v-if="currentUserStatus == true || currentUserUuid == post.user.uuid">
+                    <div v-if="currentUserStatus == 'admin' || currentUserUuid == post.user.uuid">
                         <button class="modify-post" @click="checkUserBeforeModify">M</button>
                         <button class="delete-post" @click="checkUserBeforeDelete">X</button>
                     </div>
@@ -39,7 +39,7 @@
 
 <script>
 import axios from 'axios'
-//import moment from 'vue-moment'
+// import moment from 'vue-moment'
 import Head from '../components/Head.vue'
 import Navigation from '../components/Navigation.vue'
 import NewPost from '../components/popup_modals/NewPost.vue'
@@ -79,7 +79,7 @@ export default {
         },
         checkUserBeforeModify() {
             const postUserUuid = event.target.closest('div.upper-text-bloc').getAttribute('data-user-uuid')
-            if(postUserUuid == this.currentUserUuid || this.currentUserStatus) {
+            if(postUserUuid == this.currentUserUuid || this.currentUserStatus == "admin") {
                 this.showModificationModal(event.target)
             } else {
                 console.log('Vous ne pouvez pas modifier ce post !')
@@ -87,7 +87,7 @@ export default {
         },
         checkUserBeforeDelete() {
             const postUserUuid = event.target.closest('div.upper-text-bloc').getAttribute('data-user-uuid')
-            if(postUserUuid == this.currentUserUuid || this.currentUserStatus) {
+            if(postUserUuid == this.currentUserUuid || this.currentUserStatus == 'admin') {
                 this.deletePost(event.target)
             } else {
                 console.log('Vous ne pouvez pas supprimer ce post !')
@@ -104,6 +104,7 @@ export default {
                 this.posts = response.data
                 this.currentUserUuid = localStorage.getItem('userUuid')
                 this.currentUserStatus = localStorage.getItem('isAdmin')
+                console.log(this.currentUserStatus)
                 if(this.modalNewPost == true) { this.showNewPost() }
             } catch (error) {
                 console.log(error)
@@ -130,7 +131,13 @@ export default {
     },
     created() {
         this.getAllPosts()
-    }
+        // function dateFormat() {
+        //     this.moment = moment;
+        // }
+    },
+    // setup() {
+    //     let todaysDate = new Date();
+    // }
 }
 
 

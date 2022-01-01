@@ -4,6 +4,7 @@
     <div class="main-box">
         <h2>Gestion du compte</h2>
         <div class="account-info" v-if="!modifyAccount">
+            <p v-if="userStatus == 'admin'">Ceci est un compte administrateur !</p>
             <p>Votre nom d'utilisateur: {{ user.username }}</p>
             <p>Votre email: {{ user.email }} </p>
         </div>
@@ -39,6 +40,7 @@ export default {
             username: '',
             email: '',
             password: '',
+            userStatus: '',
             modifyAccount: false,
             confirmChange: null,
             errorChange: null,
@@ -59,6 +61,7 @@ export default {
             this.user = response.data
             this.username = response.data.username
             this.email = response.data.email
+            this.userStatus = response.data.admin
         },
 
         async handleAccountDelete() {

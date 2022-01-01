@@ -13,8 +13,8 @@ module.exports = {
                 defaultValue: DataTypes.UUIDV4
             },
             admin: {
-                type: DataTypes.BOOLEAN,
-                defaultValue: false
+                type: DataTypes.STRING,
+                defaultValue: 'user'
             },
             username: {
                 type: DataTypes.STRING,

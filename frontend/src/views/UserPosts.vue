@@ -11,7 +11,7 @@
             <div class="text-bloc" v-for="post in posts" :key="post.uuid" :data-post-uuid="post.uuid">
                 <div class="upper-text-bloc" :data-user-uuid="userUuid">
                     <p class="username">{{ username }} a posté: </p>
-                    <div v-if="currentUserStatus == true || currentUserUuid == userUuid">
+                    <div v-if="currentUserStatus == 'admin' || currentUserUuid == userUuid">
                         <button class="modify-post" @click="showPostModificationModal">M</button>
                         <button class="delete-post" @click="checkUserBeforeDelete">X</button>
                     </div>
@@ -22,7 +22,7 @@
             <div class="text-bloc" v-for="comment in comments" :key="comment.uuid" :data-comment-uuid="comment.uuid">
                 <div class="upper-text-bloc" :data-user-uuid="userUuid">
                     <p class="username">{{ username }} a commenté: </p>
-                    <div v-if="currentUserStatus == true || currentUserUuid == userUuid">
+                    <div v-if="currentUserStatus == 'admin' || currentUserUuid == userUuid">
                         <button class="modify-post" @click="showCommentModificationModal">M</button>
                         <button class="delete-post" @click="checkUserBeforeDelete">X</button>
                     </div>
@@ -84,13 +84,13 @@ export default {
             const postUserUuid = event.target.closest('div.upper-text-bloc').getAttribute('data-user-uuid')
             const commentUserUuid = event.target.closest('div.upper-text-bloc').getAttribute('data-user-uuid')
             if(postUserUuid && !commentUserUuid) {
-                if(postUserUuid == this.currentUserUuid || this.currentUserStatus) {
+                if(postUserUuid == this.currentUserUuid || this.currentUserStatus == 'admin') {
                     this.showPostModificationModal(event.target)
                 } else {
                     console.log('Vous ne pouvez pas modifier ce post !')
                 }
             } else if (!postUserUuid && commentUserUuid) {
-                if(commentUserUuid == this.currentUserUuid || this.currentUserStatus) {
+                if(commentUserUuid == this.currentUserUuid || this.currentUserStatus == 'admin') {
                     this.showCommentModificationModal(event.target)
                 } else {
                     console.log('Vous ne pouvez pas modifier ce post !')
@@ -101,7 +101,7 @@ export default {
         },
         checkUserBeforeDelete() {
             this.userUuid = event.target.closest('div.upper-text-bloc').getAttribute('data-user-uuid')
-            if(this.userUuid == this.currentUserUuid || this.currentUserStatus == true) {
+            if(this.userUuid == this.currentUserUuid || this.currentUserStatus == 'admin') {
                     this.deletePostOrComment(event.target)
             } else {
                 console.log('Vous ne pouvez pas supprimer ce message !')

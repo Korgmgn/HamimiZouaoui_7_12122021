@@ -65,12 +65,14 @@ exports.modifyUser = (req, res, next) => {
 
  exports.delete = (req, res, next) => {
     user.findOne({ where: { uuid: req.body.userUuid }, include: [{ all: true }] })
-        .then((user) => 
-            //fs.unlink(`images/${filename}`, () => {
-                user.destroy()
-                    .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
-                    .catch(error => res.status(400).json({ error }))
-            //})
+        .then((user) => res.status(200).json(user)
+            
+
+                // fs.unlink(`images/${filename}`, () => {
+                //     user.destroy()
+                //         .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
+                //         .catch(error => res.status(400).json({ error }))
+                // })
         )
         .catch(error => res.status(403).json({ error: 'Unauthorized request !' }))
 }
