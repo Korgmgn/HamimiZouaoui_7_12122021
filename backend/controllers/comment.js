@@ -2,9 +2,6 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const { sequelize, user, post, comment } = require('../models/index');
 
-//const user = user.findOne({})
-    //.then(user => xx).resolve(user => user).catch()
-
 exports.createComment = (req, res, next) => {
     console.log(req.body.userUuid)
     user.findOne({ where: { uuid: req.body.userUuid }})
@@ -25,7 +22,7 @@ exports.createComment = (req, res, next) => {
 exports.modifyComment = (req, res, next) => {
     comment.findOne({ where: { uuid: req.params.commentUuid }, include: user})
         .then((comment) => {
-            if(req.body.userUuid == comment.user.uuid || req.body.isAdmin){
+            if(req.body.userUuid == comment.user.uuid || req.body.isAdmin == "admin"){
                 comment.content = req.body.content
                 comment.save()
                     .then(() => res.status(200).json({ message: 'Message modifié !'}))
@@ -42,7 +39,7 @@ exports.deleteComment = (req, res, next) => {
     console.log(req.body, req.params.commentUuid)
     comment.findOne({ where: { uuid: req.params.commentUuid }, include: user})
         .then((comment) => {
-            if(req.body.userUuid == comment.user.uuid || req.body.isAdmin){
+            if(req.body.userUuid == comment.user.uuid || req.body.isAdmin == 'admin'){
                 comment.destroy()
                     .then(() => res.status(200).json({ message: 'Message supprimé !'}))
                     .catch(error => res.status(400).json({ error }));

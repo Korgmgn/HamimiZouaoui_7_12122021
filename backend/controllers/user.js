@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 const { sequelize, user } = require('../models/index');
 
 exports.signup = (req, res, next) => {
@@ -9,14 +10,13 @@ exports.signup = (req, res, next) => {
             const newUser =  { username: req.body.username, email: req.body.email, password: hash }
             user.create(newUser)
                 .then((newUser) => res.json(newUser))
-                    /*res.status(201).json({ message: 'Utilisateur créé !' }))*/
+                /*res.status(201).json({ message: 'Utilisateur créé !' }))*/
                 .catch(error => res.status(400).json({ error }));
         })
         .catch(error => res.status(500).json({ error }));
 }
 
 exports.login = (req, res, next) => {
-    //req.body = { email, password }
     user.findOne({ where: { username: req.body.username } })
         .then(user => {
         if (!user) {
@@ -65,17 +65,22 @@ exports.modifyUser = (req, res, next) => {
 
  exports.delete = (req, res, next) => {
     user.findOne({ where: { uuid: req.body.userUuid }, include: [{ all: true }] })
-        .then((user) => res.status(200).json(user)
-            
-
-                // fs.unlink(`images/${filename}`, () => {
-                //     user.destroy()
-                //         .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
-                //         .catch(error => res.status(400).json({ error }))
-                // })
-        )
+        .then((user) => {
+            const postHasImage = user.posts.filter(post => post.image != '')
+            for(let i = 0; i < postHasImage.length; i++) {
+                const post = postHasImage[i];
+                const filename = post.image.split('/images/')[1];
+                fs.unlinkSync(`images/${filename}`, () => {
+                    console.log('Image supprimée!')
+                })
+            }
+            user.destroy()
+                .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
+                .catch(error => res.status(400).json({ error }))
+            })
         .catch(error => res.status(403).json({ error: 'Unauthorized request !' }))
 }
+
 
 exports.userAccount = (req, res, next) => {
     user.findOne({ where: { uuid: req.body.userUuid }})

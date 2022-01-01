@@ -7,13 +7,11 @@ module.exports = (req, res, next) => {
         const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
         const userUuid = decodedToken.userUuid;
         const adminStatus = decodedToken.isAdmin;
-        console.log(userUuid, adminStatus)
         if(req.body.userUuid && req.body.userUuid !== userUuid) {
             throw 'User ID non valable !';
         } else {
             req.body.userUuid = userUuid;
             req.body.isAdmin = adminStatus;
-            // console.log( adminStatus, 'Coucou, je suis auth.js, voici le adminStatus: ', req.body.isAdmin)
             next()
         }
     } catch (error) {

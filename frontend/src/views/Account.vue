@@ -73,7 +73,7 @@ export default {
                 })
                 this.$router.push('/')
             } catch (error) {
-                this.errorDelete = 'Suppresion échouée'
+                this.errorDelete = 'Suppression échouée'
             }
         },
 

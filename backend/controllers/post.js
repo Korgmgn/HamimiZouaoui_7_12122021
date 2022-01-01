@@ -26,8 +26,7 @@ exports.createPost = (req, res, next) => {
 exports.modifyPost = (req, res, next) => {
     post.findOne({ where: { uuid: req.params.postUuid }, include: user})
         .then((post) => {
-            console.log(req.body.userUuid, req.body.isAdmin)
-            if(req.body.userUuid == post.user.uuid || req.body.isAdmin) {
+            if(req.body.userUuid == post.user.uuid || req.body.isAdmin == 'admin') {
                 const filename = post.image.split('/images/')[1];
                 fs.unlink(`images/${filename}`, () => {
                     if(req.body.content) { post.content = req.body.content }
@@ -46,7 +45,7 @@ exports.modifyPost = (req, res, next) => {
 exports.deletePost = (req, res, next) => {
     post.findOne({ where: { uuid: req.params.postUuid }, include: user})
         .then((post) => {
-            if(req.body.userUuid == post.user.uuid || req.body.isAdmin){
+            if(req.body.userUuid == post.user.uuid || req.body.isAdmin == 'admin'){
                 const filename = post.image.split('/images/')[1];
                 fs.unlink(`images/${filename}`, () => {
                     post.destroy()
