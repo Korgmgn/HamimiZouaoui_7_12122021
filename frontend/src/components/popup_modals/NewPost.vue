@@ -5,7 +5,7 @@
             <h2>Votre nouveau message</h2>
             <form @submit.prevent="handleNewPost" action="submit" enctype="multipart/form-data">
                 <textarea v-model="content" class="text-input" type="text" maxlength="160"/>
-                <p>Limite de 160 caractères</p>
+                <p>Limite de caractères: 2 à 160</p>
                 <input type="file" @change="onFileSelect" accept="image/*">
                 <p v-if="confirmNewpost">{{ confirmNewpost }}</p>
                 <p v-if="errorNewpost">{{ errorNewpost }}</p>
@@ -39,7 +39,8 @@ export default {
         },  
 
         async handleNewPost() {
-            if(this.content || this.imageURL) {
+            console.log(this.content.length)
+            if(this.content && this.content.length >= 2 || this.imageURL && this.content & this.content >= 2 || this.imageURL && !this.content) {
                 const formData = new FormData();
                 formData.append("content", this.content);
                 formData.append("image", this.imageURL);

@@ -5,7 +5,7 @@
             <h2>Modifier le message:</h2>
             <form @submit.prevent="handleModifyPost" action="submit" enctype="multipart/form-data">
                 <textarea v-model="content" class="text-input" type="text" maxlength="160"/>
-                <p>Limite de 160 caractères</p>
+                <p>Limite de caractères: 2 à 160</p>
                 <input type="file" @change="onFileSelect" accept="image/*">
                 <p v-if="confirmModifyPost">{{ confirmModifyPost }}</p>
                 <p v-if="errorModifyPost">{{ errorModifyPost }}</p>
@@ -23,7 +23,6 @@ export default {
     data() {
         return {
             content: '',
-            imagePreview: '',
             imageUrl: '',
             confirmModifyPost: null,
             errorModifyPost: null
@@ -39,12 +38,11 @@ export default {
         onFileSelect(event) {
             this.imageURL = event.target.files[0];
             console.log(this.imageURL)
-            this.imagePreview = URL.createObjectURL(this.imageURL);
         },  
 
         async handleModifyPost() {
             console.log(this.postUuid)
-            if(this.content || this.imageURL) {
+            if(this.content && this.content.length >= 2 || this.imageURL && this.content & this.content >= 2 || this.imageURL && !this.content) {
                 const formData = new FormData();
                 formData.append("content", this.content);
                 formData.append("image", this.imageURL);
@@ -57,7 +55,6 @@ export default {
                     }
                 })
                 this.content = ''
-                this.imagePreview = ''
                 this.imageURL = ''
                 this.confirmModifyPost = 'Message modifié !'
                 this.errorModifyPost = null

@@ -112,6 +112,10 @@ export default {
 
         async handleAccountChange() {
             if(this.checkFormInput(this.username, this.email, this.password) == true) {
+                this.usernameError = null
+                this.emailError = null
+                this.passwordError = null
+
                 await axios.put('http://localhost:3000/users/modify', {
                     username: this.username,
                     email: this.email,
@@ -125,7 +129,9 @@ export default {
                 this.email = ''
                 this.password = ''
                 this.confirmChange = 'Changements appliqués !'
+                this.errorChange = null
             } else {
+                this.confirmChange = null
                 this.errorChange = 'Modification échouée !'
             }
         }

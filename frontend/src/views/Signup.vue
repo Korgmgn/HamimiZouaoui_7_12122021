@@ -74,6 +74,10 @@ export default {
         },
         async handleSignup() {
             if(this.checkFormInput(this.signupUsername, this.signupEmail, this.signupPassword) == true) {
+                this.usernameError = null
+                this.emailError = null
+                this.passwordError = null
+                
                 const response = await axios.post('http://localhost:3000/users/signup', {
                     username: this.signupUsername,
                     email: this.signupEmail,
@@ -82,6 +86,7 @@ export default {
                 this.signupUsername = ''
                 this.signupEmail = ''
                 this.signupPassword = ''
+                
                 this.signupSuccess = 'Compte créé !'
                 this.signupError = null
             } else {
