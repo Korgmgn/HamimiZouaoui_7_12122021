@@ -11,10 +11,16 @@
         <form class="login-form" @submit.prevent="handleAccountChange" action="submit" v-else>
             <label for="username">Nouveau nom d'utilisateur: </label>
             <input v-model="username" class="post-form" name="username" type="text" required>
+            <p v-if="usernameError">{{ usernameError }}</p>
+
             <label for="email">Nouvel email: </label>
             <input v-model="email" class="post-form" name="email" type="text" required>
+            <p v-if="emailError">{{ emailError }}</p>
+
             <label for="password">Confirmez ou changez votre mot de passe: </label>
             <input v-model="password" class="post-form" name="password" type="password" required>
+            <p v-if="passwordError">{{ passwordError }}</p>
+
             <button>Soumettre</button>
             <p v-if="confirmChange">{{ confirmChange }}</p>
             <p v-if="errorChange">{{ errorChange }}</p>
@@ -43,6 +49,10 @@ export default {
             userStatus: '',
             modifyAccount: false,
             confirmChange: null,
+
+            usernameError: null,
+            emailError: null,
+            passwordError: null,
             errorChange: null,
             errorDelete: null,
         }
@@ -51,6 +61,29 @@ export default {
         allowChanges() {
             this.modifyAccount = !this.modifyAccount
         },
+        checkFormInput(usernameInput, emailInput, passwordInput) {
+            if(usernameInput == '' || emailInput == '' || passwordInput =='') {
+                this.signupError = 'Veuillez remplir tous les champs !'
+            } else if(!this.usernameRegex(this.username)){
+                this.usernameError = 'Lettres et espaces seulement !'
+            } else if(!this.emailRegex(this.email)){
+                this.emailError = 'Ce format n\'est pas reconnu !'
+            } else if(!this.passwordRegex(this.password)){
+                this.passwordError = 'Lettres et chiffres seulement !'
+            } else {
+                return true
+            }
+        },
+        usernameRegex(usernameInput){
+            return /^[A-Z-a-z\s]{3,12}$/.test(usernameInput)
+        },       
+        emailRegex(emailInput){
+            return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailInput)
+        },
+        passwordRegex(passwordInput){
+            return /^[A-Za-z0-9]{5,12}$/.test(passwordInput)
+        },
+
         async getAccount() {
             const response = await axios.get('http://localhost:3000/users/account', {
                 headers: {
@@ -78,7 +111,7 @@ export default {
         },
 
         async handleAccountChange() {
-            try {
+            if(this.checkFormInput(this.username, this.email, this.password) == true) {
                 await axios.put('http://localhost:3000/users/modify', {
                     username: this.username,
                     email: this.email,
@@ -92,7 +125,7 @@ export default {
                 this.email = ''
                 this.password = ''
                 this.confirmChange = 'Changements appliqués !'
-            } catch (error) {
+            } else {
                 this.errorChange = 'Modification échouée !'
             }
         }

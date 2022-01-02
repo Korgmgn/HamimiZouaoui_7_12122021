@@ -4,7 +4,8 @@
             <div class="close-modal"  @click="closeModal">X</div>
             <h2>Modifiez votre commentaire:</h2>
             <form @submit.prevent="handleModifyComment" action="submit">
-                <input v-model="content" class="text-input" type="text">
+                <textarea v-model="content" class="text-input" type="text" maxlength="100" />
+                <p>Limite de 100 caractères</p>
                 <p v-if="confirmModifyComment">{{ confirmModifyComment }}</p>
                 <p v-if="errorModifyComment">{{ errorModifyComment }}</p>
                 <button>Envoyer</button>
@@ -44,8 +45,10 @@ export default {
                 }})
                 this.content = ''
                 this.confirmModifyComment = 'Commentaire modifié !'
+                this.errorModifyComment = null
                 this.refreshComments()
             } else {
+                this.confirmModifyComment = null
                 this.errorModifyComment = 'Ajoutez du texte !'
             }  
         }

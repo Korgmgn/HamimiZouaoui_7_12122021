@@ -100,11 +100,9 @@ export default {
                         Authorization: 'Bearer ' + localStorage.getItem('token')
                     }
                 })
-                console.log(response.data)
                 this.posts = response.data
                 this.currentUserUuid = localStorage.getItem('userUuid')
                 this.currentUserStatus = localStorage.getItem('isAdmin')
-                console.log(this.currentUserStatus)
                 if(this.modalNewPost == true) { this.showNewPost() }
             } catch (error) {
                 console.log(error)

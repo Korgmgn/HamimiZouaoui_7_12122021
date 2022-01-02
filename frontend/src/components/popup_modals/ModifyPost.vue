@@ -4,7 +4,8 @@
             <div class="close-modal"  @click="closeModal">X</div>
             <h2>Modifier le message:</h2>
             <form @submit.prevent="handleModifyPost" action="submit" enctype="multipart/form-data">
-                <textarea v-model="content" class="text-input" type="text" />
+                <textarea v-model="content" class="text-input" type="text" maxlength="160"/>
+                <p>Limite de 160 caractères</p>
                 <input type="file" @change="onFileSelect" accept="image/*">
                 <p v-if="confirmModifyPost">{{ confirmModifyPost }}</p>
                 <p v-if="errorModifyPost">{{ errorModifyPost }}</p>
@@ -59,8 +60,10 @@ export default {
                 this.imagePreview = ''
                 this.imageURL = ''
                 this.confirmModifyPost = 'Message modifié !'
+                this.errorModifyPost = null
                 this.refreshPosts()
             } else {
+                this.confirmModifyPost = null
                 this.errorModifyPost = 'Ajoutez du texte, ou une image !'
             }
         }

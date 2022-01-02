@@ -16,7 +16,7 @@ exports.createPost = (req, res, next) => {
                     const newPost = req.file ? { content: req.body.content, userId: user.id, image: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` } : { content: req.body.content, userId: user.id, image: '' }
                     
                     post.create(newPost) //utiliser include + voir discord
-                        .then((newPost) => res.json(newPost))
+                        .then((newPost) => res.status(200).json(newPost))
                         .catch(error => res.status(400).json({ error }));
             })
             .catch(error => res.status(400).json({ error: 'Errur dans le .findOne' }));

@@ -7,10 +7,12 @@
             <div class="username-input">
                 <label for="username">Nom d'utilisateur: </label>
                 <input v-model="loginUsername" type="text" name="username" required>
+                <p v-if="usernameError">{{ usernameError }}</p>
             </div>
             <div class="password">
                 <label for="password">Mot de passe: </label>
                 <input v-model="loginPassword" type="password" name="password" required>
+                <p v-if="passwordError">{{ passwordError }}</p>
             </div>
             <button>Se connecter</button>
             <p v-if="loginError">{{ loginError }}</p>
@@ -21,7 +23,6 @@
 <script>
 import axios from 'axios'
 import Head from '../components/Head.vue'
-//import { mapActions } from 'vuex'
 
 export default {
     name: 'Login',
@@ -30,12 +31,31 @@ export default {
         return {
             loginUsername : '',
             loginPassword : '',
+            usernameError: null,
+            passwordError: null,
             loginError: null
         }
     },
     methods: {
+        checkFormInput(usernameInput, passwordInput) {
+            if(usernameInput == '' || passwordInput =='') {
+                this.loginError = 'Veuillez remplir tous les champs !'
+            } else if(!this.usernameRegex(this.loginUsername)){
+                this.usernameError = 'Lettres et espaces seulement !'
+            } else if(!this.passwordRegex(this.loginPassword)){
+                this.passwordError = 'Lettres et chiffres seulement !'
+            } else {
+                return true
+            }
+        },
+        usernameRegex(usernameInput){
+            return /^[A-Z-a-z\s]{3,12}$/.test(usernameInput)
+        },       
+        passwordRegex(passwordInput){
+            return /^[A-Za-z0-9]{5,12}$/.test(passwordInput)
+        },
         async handleLogin() {
-            try{
+            if(this.checkFormInput(this.loginUsername, this.loginPassword) == true) {
                 const response = await axios.post('http://localhost:3000/users/login', {
                     username: this.loginUsername,
                     password: this.loginPassword
@@ -45,13 +65,8 @@ export default {
                 localStorage.setItem('userUuid', response.data.userUuid);
                 localStorage.setItem('isAdmin', response.data.isAdmin);
 
-                // this.$store.state.token = response.data.token
-                // this.$store.state.isAdmin = response.data.isAdmin
-                // this.$store.state.userUuid = response.data.userUuid
-                // console.log('Le token: ', this.$store.state.token, 'Statut: ', this.$store.state.isAdmin)
                 this.$router.push('/home')
-            
-            } catch (error) {
+            } else {
                 this.loginError = 'Connexion échouée !'
             }
         }
