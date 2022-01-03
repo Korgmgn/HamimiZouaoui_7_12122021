@@ -11,20 +11,20 @@
                 <p>Aucun message !</p>
             </div>
             <div class="text-bloc" v-for="post in posts" :key="post.uuid" :data-post-uuid="post.uuid">
+                <span>Le {{ dateFormat(post.createdAt) }}</span>
+                <span v-if="post.createdAt !== post.updatedAt">Modifié le {{ dateFormat(post.updatedAt) }}</span>
                 <div class="upper-text-bloc" :data-user-uuid="post.user.uuid">
-                    <!-- <span>Posté le {{ moment(todaysDate).format("ddd MMM DD, YYYY [at] HH:mm a") }}</span> -->
-                    <!-- <span v-if="post.createdAt !== post.updatedAt">Modifié le {{ timestampFormat(post.updatedAt) }}</span> -->
                     <span class="username">
                         <router-link :to="{ name: 'UserPosts', params: { useruuid: post.user.uuid } }" >
                             {{ post.user.username }}
                         </router-link>
                     </span>
-                    <div v-if="currentUserStatus == 'admin' || currentUserUuid == post.user.uuid">
-                        <button class="modify-post" @click="checkUserBeforeModify">M</button>
-                        <button class="delete-post" @click="checkUserBeforeDelete">X</button>
+                    <div class="post-buttons" v-if="currentUserStatus == 'admin' || currentUserUuid == post.user.uuid">
+                        <button class="modify-post" @click="checkUserBeforeModify">Modifier</button>
+                        <button class="delete-post" @click="checkUserBeforeDelete">Supprimer</button>
                     </div>
                 </div>
-                <img :src="post.image" alt="Image envoyée par un utilisateur" v-if="post.image">
+                <img :src="post.image" :alt="'Image envoyée par ' + post.user.username" v-if="post.image">
                 <p class="text" v-if="post.content">{{ post.content }}</p>
                 <div class="comment-section">
                     <button @click="showNewComment">Commenter</button>
@@ -39,7 +39,7 @@
 
 <script>
 import axios from 'axios'
-// import moment from 'vue-moment'
+import moment from 'moment'
 import Head from '../components/Head.vue'
 import Navigation from '../components/Navigation.vue'
 import NewPost from '../components/popup_modals/NewPost.vue'
@@ -120,22 +120,18 @@ export default {
             } catch (error) {
                 console.log(error)
             }
+        },
+        dateFormat(date){
+                if (date) {
+                    return moment(String(date)).format('DD/MM/YYYY [à] HH:mm')
+                }
         }
-        // timestampFormat(timestamp){
-        //         if (timestamp) {
-        //             return moment(String(timestamp)).format('DD/MM/YYYY')
-        //         }
-        // },
     },
     created() {
+        this.moment = moment
         this.getAllPosts()
-        // function dateFormat() {
-        //     this.moment = moment;
-        // }
-    },
-    // setup() {
-    //     let todaysDate = new Date();
-    // }
+        
+    }
 }
 
 

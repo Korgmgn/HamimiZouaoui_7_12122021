@@ -1,16 +1,16 @@
 <template>
     <div class="backdrop">
         <div class="main-box">
-            <div class="close-modal"  @click="closeModal">X</div>
             <h2>Votre nouveau message</h2>
             <form @submit.prevent="handleNewPost" action="submit" enctype="multipart/form-data">
-                <textarea v-model="content" class="text-input" type="text" maxlength="160"/>
+                <textarea ref="textinput" v-model="content" class="text-input" type="text" maxlength="160"/>
                 <p>Limite de caractères: 2 à 160</p>
-                <input type="file" @change="onFileSelect" accept="image/*">
+                <input class="file-input" type="file" @change="onFileSelect" accept="image/*">
                 <p v-if="confirmNewpost">{{ confirmNewpost }}</p>
                 <p v-if="errorNewpost">{{ errorNewpost }}</p>
                 <button>Envoyer</button>
             </form>
+            <button class="close-button" @click="closeModal">Fermer</button>
         </div>
     </div>
 </template>
@@ -28,6 +28,7 @@ export default {
         }
     },
     methods: {
+
         closeModal() {
             this.$emit('close')
         },
@@ -39,7 +40,6 @@ export default {
         },  
 
         async handleNewPost() {
-            console.log(this.content.length)
             if(this.content && this.content.length >= 2 || this.imageURL && this.content & this.content >= 2 || this.imageURL && !this.content) {
                 const formData = new FormData();
                 formData.append("content", this.content);
@@ -61,6 +61,9 @@ export default {
                 this.errorNewpost = 'Ajouter du texte, ou une image !'
             }
         }
+    },
+    mounted () {
+        this.$refs.textinput.focus();
     }
 }
 </script>

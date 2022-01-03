@@ -9,15 +9,17 @@
                     <p>Aucun commentaire !</p>
                 </div>
                 <div class="text-bloc" v-for="comment in comments" :key="comment.uuid" :data-comment-uuid="comment.uuid">
+                    <span>Le {{ dateFormat(comment.createdAt) }}</span>
+                    <span v-if="comment.createdAt !== comment.updatedAt">Modifié le {{ dateFormat(comment.updatedAt) }}</span>
                     <div class="upper-text-bloc" :data-user-uuid="comment.user.uuid">
                         <span class="username">
                             <router-link :to="{ name: 'UserPosts', params: { useruuid: comment.user.uuid } }">
                                 {{ comment.user.username }}
                             </router-link>
                         </span>
-                        <div v-if="currentUserStatus == 'admin' || currentUserUuid == comment.user.uuid">
-                            <button class="modify-post" @click="checkUserBeforeModify">M</button>
-                            <button class="delete-post" @click="checkUserBeforeDelete">X</button>
+                        <div class="post-buttons" v-if="currentUserStatus == 'admin' || currentUserUuid == comment.user.uuid">
+                            <button class="modify-post" @click="checkUserBeforeModify">Modifier</button>
+                            <button class="delete-post" @click="checkUserBeforeDelete">Supprimer</button>
                         </div>  
                     </div>
                     <p class="text">{{comment.content}}</p>
@@ -28,6 +30,7 @@
 
 <script>
 import axios from 'axios'
+import moment from 'moment'
 import Head from '../components/Head.vue'
 import Navigation from '../components/Navigation.vue'
 import ModifyComment from '../components/popup_modals/ModifyComment.vue'
@@ -94,9 +97,15 @@ export default {
             } catch (error) {
                 console.log(error)
             }
+        },
+        dateFormat(date){
+                if (date) {
+                    return moment(String(date)).format('DD/MM/YYYY [à] HH:mm')
+                }
         }
     },
     created() {
+        this.moment = moment
         this.getPostComments()
     }
 }

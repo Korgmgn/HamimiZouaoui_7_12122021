@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const path = require('path');
-//const dotenv = require('dotenv');
 const { sequelize } = require('./models/index');
 
 const app = express();
@@ -28,7 +27,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(express.urlencoded({ extended: true }));
+
 app.use(helmet());
 app.use(express.json());
 app.use(bodyParser.json());

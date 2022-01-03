@@ -3,6 +3,7 @@
     <Navigation />
     <div class="main-box">
         <h2>Gestion du compte</h2>
+        <button ref="togglechange" class="account-button" @click="allowChanges">Changez vos infos</button> 
         <div class="account-info" v-if="!modifyAccount">
             <p v-if="userStatus == 'admin'">Ceci est un compte administrateur !</p>
             <p>Votre nom d'utilisateur: {{ user.username }}</p>
@@ -25,7 +26,6 @@
             <p v-if="confirmChange">{{ confirmChange }}</p>
             <p v-if="errorChange">{{ errorChange }}</p>
         </form>
-        <button class="account-button" @click="allowChanges">Changez vos infos</button>
         <br>
         <button class="account-button" @click="handleAccountDelete">Supprimez le compte</button>
         <p v-if="errorDelete">{{ errorDelete }}</p>
@@ -138,6 +138,9 @@ export default {
     },
     created(){
         this.getAccount()
+    },
+    mounted () {
+        this.$refs.togglechange.focus();
     }
 }
 </script>

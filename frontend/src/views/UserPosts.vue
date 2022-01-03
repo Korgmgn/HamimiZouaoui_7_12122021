@@ -9,22 +9,26 @@
                 <p>Aucun message !</p>
             </div>
             <div class="text-bloc" v-for="post in posts" :key="post.uuid" :data-post-uuid="post.uuid">
+                <span>Le {{ dateFormat(post.createdAt) }}</span>
+                <span v-if="post.createdAt !== post.updatedAt">Modifié le {{ dateFormat(post.updatedAt) }}</span>
                 <div class="upper-text-bloc" :data-user-uuid="userUuid">
                     <p class="username">{{ username }} a posté: </p>
-                    <div v-if="currentUserStatus == 'admin' || currentUserUuid == userUuid">
-                        <button class="modify-post" @click="showPostModificationModal">M</button>
-                        <button class="delete-post" @click="checkUserBeforeDelete">X</button>
+                    <div class="post-buttons" v-if="currentUserStatus == 'admin' || currentUserUuid == userUuid">
+                        <button class="modify-post" @click="showPostModificationModal">Modifier</button>
+                        <button class="delete-post" @click="checkUserBeforeDelete">Supprimer</button>
                     </div>
                 </div>
                 <img :src="post.image" alt="Image envoyée par un utilisateur" v-if="post.image">
                 <p class="text" v-if="post.content">{{ post.content }}</p>
             </div>
             <div class="text-bloc" v-for="comment in comments" :key="comment.uuid" :data-comment-uuid="comment.uuid">
+                <span>Le {{ dateFormat(comment.createdAt) }}</span>
+                <span v-if="comment.createdAt !== comment.updatedAt">Modifié le {{ dateFormat(comment.updatedAt) }}</span>
                 <div class="upper-text-bloc" :data-user-uuid="userUuid">
                     <p class="username">{{ username }} a commenté: </p>
-                    <div v-if="currentUserStatus == 'admin' || currentUserUuid == userUuid">
-                        <button class="modify-post" @click="showCommentModificationModal">M</button>
-                        <button class="delete-post" @click="checkUserBeforeDelete">X</button>
+                    <div class="post-buttons" v-if="currentUserStatus == 'admin' || currentUserUuid == userUuid">
+                        <button class="modify-post" @click="showCommentModificationModal">Modifier</button>
+                        <button class="delete-post" @click="checkUserBeforeDelete">Supprimer</button>
                     </div>
                 </div>
                 <p class="text">{{comment.content}}</p>
@@ -36,6 +40,7 @@
 
 <script>
 import axios from 'axios'
+import moment from 'moment'
 import Head from '../components/Head.vue'
 import Navigation from '../components/Navigation.vue'
 import ModifyPost from '../components/popup_modals/ModifyPost.vue'
@@ -154,9 +159,15 @@ export default {
             } else {
                 console.log('Une erreur est survenue')
             }
+        },
+        dateFormat(date){
+                if (date) {
+                    return moment(String(date)).format('DD/MM/YYYY [à] HH:mm')
+                }
         }
     },
     created(){
+        this.moment = moment
         this.getUserPosts()
     }
     

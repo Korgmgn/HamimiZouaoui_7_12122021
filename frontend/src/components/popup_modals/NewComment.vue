@@ -1,15 +1,15 @@
 <template>
     <div class="backdrop">
         <div class="main-box">
-            <div class="close-modal"  @click="closeModal">X</div>
             <h2>Commentaire:</h2>
             <form @submit.prevent="handleNewComment" action="submit">
-                <textarea v-model="content" class="text-input" type="text" maxlength="100" />
-                <p>Limite de 100 caractères</p>
+                <textarea ref="textinput" v-model="content" class="text-input" type="text" maxlength="100" />
+                <p>Limite de caractères: 2 à 100</p>
                 <p v-if="confirmNewcomment">{{ confirmNewcomment }}</p>
                 <p v-if="errorNewcomment">{{ errorNewcomment }}</p>
                 <button>Envoyer</button>
             </form>
+            <button class="close-button" @click="closeModal">Fermer</button>
         </div>
     </div>
 </template>
@@ -35,8 +35,7 @@ export default {
         },
 
         async handleNewComment() {
-            if(this.content) {
-                console.log(this.postUuid)
+            if(this.content && this.content.length >= 2) {
                 await axios.post(`http://localhost:3000/comments/create/${this.postUuid}`, {
                     content: this.content
                 },
@@ -50,10 +49,15 @@ export default {
                 this.refreshPosts()
             } else {
                 this.confirmNewcomment = null
-                this.errorNewcomment = "Commentaire vide !"
+                this.errorNewcomment = "Commentaire trop court !"
             }
         }
+    },
+    mounted() {
+        this.$refs.textinput.focus();
     }
 }
 </script>
+
+
 

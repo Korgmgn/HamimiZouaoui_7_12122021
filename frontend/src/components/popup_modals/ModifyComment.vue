@@ -1,7 +1,6 @@
 <template>
     <div class="backdrop">
         <div class="main-box">
-            <div class="close-modal"  @click="closeModal">X</div>
             <h2>Modifiez votre commentaire:</h2>
             <form @submit.prevent="handleModifyComment" action="submit">
                 <textarea v-model="content" class="text-input" type="text" maxlength="100" />
@@ -10,6 +9,7 @@
                 <p v-if="errorModifyComment">{{ errorModifyComment }}</p>
                 <button>Envoyer</button>
             </form>
+            <button class="close-button" @click="closeModal">Fermer</button>
         </div>
     </div>
 </template>

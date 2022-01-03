@@ -55,19 +55,21 @@ export default {
             return /^[A-Za-z0-9]{5,12}$/.test(passwordInput)
         },
         async handleLogin() {
-            if(this.checkFormInput(this.loginUsername, this.loginPassword) == true) {
-                const response = await axios.post('http://localhost:3000/users/login', {
-                    username: this.loginUsername,
-                    password: this.loginPassword
-                })
-                
-                localStorage.setItem('token', response.data.token);
-                localStorage.setItem('userUuid', response.data.userUuid);
-                localStorage.setItem('isAdmin', response.data.isAdmin);
+            try {
+                if(this.checkFormInput(this.loginUsername, this.loginPassword) == true) {
+                    const response = await axios.post('http://localhost:3000/users/login', {
+                        username: this.loginUsername,
+                        password: this.loginPassword
+                    })
+                    
+                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('userUuid', response.data.userUuid);
+                    localStorage.setItem('isAdmin', response.data.isAdmin);
 
-                this.$router.push('/home')
-            } else {
-                this.loginError = 'Connexion échouée !'
+                    this.$router.push('/home')
+                }
+            } catch (error) {
+                this.loginError = error.response.data.error
             }
         }
     }
