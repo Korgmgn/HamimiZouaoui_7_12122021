@@ -38,6 +38,7 @@ export default {
         //Requête permettant de modifier un commentaire
         async handleModifyComment() {
             if(this.content) {
+                //Ici on ajoute dynamique à la requête l'uuid du commentaire, que l'API récupère sous req.params, ce qui permet à l'ORM de trouver le commentaire en question
                 await axios.put(`http://localhost:3000/comments/modify/${this.commentUuid}`, {
                     content: this.content
                 },

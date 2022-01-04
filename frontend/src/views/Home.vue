@@ -118,6 +118,7 @@ export default {
         async deletePost(eventTarget) {
             const postUuid = event.target.closest('div.text-bloc').getAttribute('data-post-uuid')
             try {
+                //Ici on ajoute dynamique à la requête l'uuid du post, que l'API récupère sous req.params, ce qui permet à l'ORM de trouver le post en question
                 await axios.delete(`http://localhost:3000/posts/delete/${postUuid}`, {
                     headers: {
                         Authorization: 'Bearer ' + localStorage.getItem('token')

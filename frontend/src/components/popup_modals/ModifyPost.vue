@@ -48,6 +48,7 @@ export default {
                 formData.append("image", this.imageURL);
                 formData.append("userUuid", localStorage.getItem('userUuid'))
                 formData.append("isAdmin", localStorage.getItem('isAdmin'))
+                //Ici on ajoute dynamique à la requête l'uuid du post, que l'API récupère sous req.params, ce qui permet à l'ORM de trouver le post en question
                 await axios.put(`http://localhost:3000/posts/modify/${this.postUuid}`, formData, {
                     headers: {
                         'Content-type': 'multipart/form-data',

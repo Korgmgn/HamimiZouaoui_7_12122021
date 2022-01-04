@@ -95,6 +95,7 @@ export default {
         async deleteComment(eventTarget) {
             const commentUuid = event.target.closest('div.text-bloc').getAttribute('data-comment-uuid')
             try {
+                //Ici on ajoute dynamique à la requête l'uuid du commentaire, que l'API récupère sous req.params, ce qui permet à l'ORM de trouver le commentaire en question
                 await axios.delete(`http://localhost:3000/comments/delete/${commentUuid}`, {
                     headers: {
                         Authorization: 'Bearer ' + localStorage.getItem('token')

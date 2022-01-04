@@ -118,8 +118,9 @@ export default {
         },
         //Cette fonction lancée lors du cycle created, récupère tous les posts et commentaires d'un utilisateur
         async getUserPosts() {
-            try {
-                const response = await axios.get(`http://localhost:3000/posts/userposts/${this.$route.params.useruuid}`, {
+            try { 
+                //Ici on récupère les paramètres d'url pour les envoyer à l'api en req.params, ce qui permet à l'ORM de trouver l'utilisateur en question
+                const response = await axios.get(`http://localhost:3000/posts/userposts/${this.$route.params.useruuid}`, { 
                     headers: {
                         Authorization: 'Bearer ' + localStorage.getItem('token')
                     }
