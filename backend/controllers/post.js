@@ -6,16 +6,14 @@ const { all } = require('sequelize/dist/lib/operators');
 exports.createPost = (req, res, next) => {
     const postContent = req.body.content
     const postImage = req.file
-    // console.log('Voilà le contenu ', postContent, postImage, req.body.userUuid)
     if(!postContent && !postImage) {
         return res.status(400).json({ error: 'Insérez du texte ou une image !'})
     } else {
-        // console.log('ici avant findOne', req.body.userUuid)
         user.findOne({ where: { uuid: req.body.userUuid }})
             .then((user) => {
                     const newPost = req.file ? { content: req.body.content, userId: user.id, image: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` } : { content: req.body.content, userId: user.id, image: '' }
                     
-                    post.create(newPost) //utiliser include + voir discord
+                    post.create(newPost)
                         .then((newPost) => res.status(200).json(newPost))
                         .catch(error => res.status(400).json({ error }));
             })

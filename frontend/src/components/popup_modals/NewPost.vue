@@ -28,7 +28,8 @@ export default {
         }
     },
     methods: {
-
+        //Ces fonctions emmetent un event au component parent 
+        //afin de fermer le popup ou relancer la requête GET du parent
         closeModal() {
             this.$emit('close')
         },
@@ -38,7 +39,7 @@ export default {
         onFileSelect(event) {
                 this.imageURL = event.target.files[0];
         },  
-
+        //Requête permettant de créer un nouveau post
         async handleNewPost() {
             if(this.content && this.content.length >= 2 || this.imageURL && this.content & this.content >= 2 || this.imageURL && !this.content) {
                 const formData = new FormData();

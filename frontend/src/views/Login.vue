@@ -5,13 +5,15 @@
         <form @submit.prevent="handleLogin" class="login-form" action="submit">
             <h2>Connexion</h2>
             <div class="username-input">
-                <label for="username">Nom d'utilisateur: </label>
-                <input v-model="loginUsername" type="text" name="username" required>
+                <label for="login-username">
+                    Nom d'utilisateur: <input id ="login-username" v-model="loginUsername" type="text" name="username" required>
+                </label>
                 <p v-if="usernameError">{{ usernameError }}</p>
             </div>
             <div class="password">
-                <label for="password">Mot de passe: </label>
-                <input v-model="loginPassword" type="password" name="password" required>
+                <label for="login-password">
+                    Mot de passe: <input id="login-password" v-model="loginPassword" type="password" name="password" required>
+                </label>
                 <p v-if="passwordError">{{ passwordError }}</p>
             </div>
             <button>Se connecter</button>
@@ -31,12 +33,14 @@ export default {
         return {
             loginUsername : '',
             loginPassword : '',
+
             usernameError: null,
             passwordError: null,
             loginError: null
         }
     },
     methods: {
+        //Vérifie les regex
         checkFormInput(usernameInput, passwordInput) {
             if(usernameInput == '' || passwordInput =='') {
                 this.loginError = 'Veuillez remplir tous les champs !'
@@ -54,6 +58,7 @@ export default {
         passwordRegex(passwordInput){
             return /^[A-Za-z0-9]{5,12}$/.test(passwordInput)
         },
+        //Si la vérification regex est réussie, envoie la requête.
         async handleLogin() {
             try {
                 if(this.checkFormInput(this.loginUsername, this.loginPassword) == true) {

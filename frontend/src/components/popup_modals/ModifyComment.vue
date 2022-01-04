@@ -27,13 +27,15 @@ export default {
         }
     },
     methods: {
+        //Ces fonctions emmetent un event au component parent 
+        //afin de fermer le popup ou relancer la requête GET du parent
         closeModal() {
             this.$emit('close')
         },
         refreshComments(){
             this.$emit('refresh')
         },
-
+        //Requête permettant de modifier un commentaire
         async handleModifyComment() {
             if(this.content) {
                 await axios.put(`http://localhost:3000/comments/modify/${this.commentUuid}`, {

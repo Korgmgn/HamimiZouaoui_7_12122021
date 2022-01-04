@@ -10,16 +10,19 @@
             <p>Votre email: {{ user.email }} </p>
         </div>
         <form class="login-form" @submit.prevent="handleAccountChange" action="submit" v-else>
-            <label for="username">Nouveau nom d'utilisateur: </label>
-            <input v-model="username" class="post-form" name="username" type="text" required>
+            <label for="account-username">
+                Nouveau nom d'utilisateur: <input id="account-username" v-model="username" class="post-form" name="username" type="text" required>
+            </label>
             <p v-if="usernameError">{{ usernameError }}</p>
 
-            <label for="email">Nouvel email: </label>
-            <input v-model="email" class="post-form" name="email" type="text" required>
+            <label for="account-email">
+                Nouvel email: <input id="account-email" v-model="email" class="post-form" name="email" type="text" required>
+            </label>
             <p v-if="emailError">{{ emailError }}</p>
 
-            <label for="password">Confirmez ou changez votre mot de passe: </label>
-            <input v-model="password" class="post-form" name="password" type="password" required>
+            <label for="account-password">
+                Confirmez ou changez votre mot de passe: <input id="account-password" v-model="password" class="post-form" name="password" type="password" required>
+            </label>
             <p v-if="passwordError">{{ passwordError }}</p>
 
             <button>Soumettre</button>
@@ -58,9 +61,12 @@ export default {
         }
     },
     methods: {
+        //Déclenche l'affichage des inputs permettant 
+        //les changements d'informations du compte
         allowChanges() {
             this.modifyAccount = !this.modifyAccount
         },
+        //Vérifie les regex
         checkFormInput(usernameInput, emailInput, passwordInput) {
             if(usernameInput == '' || emailInput == '' || passwordInput =='') {
                 this.signupError = 'Veuillez remplir tous les champs !'
@@ -83,20 +89,19 @@ export default {
         passwordRegex(passwordInput){
             return /^[A-Za-z0-9]{5,12}$/.test(passwordInput)
         },
-
+        //Lancée lors du cycle createdEnvoie une requête pour obtenir l'utilisateur voulu.
         async getAccount() {
             const response = await axios.get('http://localhost:3000/users/account', {
                 headers: {
                     Authorization: 'Bearer ' + localStorage.getItem('token')
                 }
             })
-            console.log(response.data)
             this.user = response.data
             this.username = response.data.username
             this.email = response.data.email
             this.userStatus = response.data.admin
         },
-
+        //Permet la suppression de l'utilisateur 
         async handleAccountDelete() {
             try {
                 await axios.delete('http://localhost:3000/users/delete', {
@@ -109,7 +114,7 @@ export default {
                 this.errorDelete = 'Suppression échouée'
             }
         },
-
+        //Envoie la requête de modification d'informations du compte
         async handleAccountChange() {
             if(this.checkFormInput(this.username, this.email, this.password) == true) {
                 this.usernameError = null

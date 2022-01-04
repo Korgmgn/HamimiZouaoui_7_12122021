@@ -6,20 +6,23 @@
             <h2>Créez un compte:</h2>
 
             <div class="username-input">
-                <label for="username">Nom d'utilisateur: </label>
-                <input v-model="signupUsername" type="text" name="username" required>
+                <label for="signup-username">
+                    Nom d'utilisateur: <input id="signup-username" v-model="signupUsername" type="text" name="username" required>
+                </label>
                 <p v-if="usernameError">{{ usernameError }}</p>
                 <p v-else>(3 à 12 caractères)</p>
             </div>
             <div class="email">
-                <label for="email">Votre adresse mail: </label>
-                <input v-model="signupEmail" type="text" name="email" required>
+                <label for="signup-email">
+                    Votre adresse mail: <input id="signup-email" v-model="signupEmail" type="text" name="email" required>
+                </label>
                 <p v-if="emailError">{{ emailError }}</p>
                 <p v-else>(ex: hello@test.com)</p>
             </div>
             <div class="password">
-                <label for="password">Mot de passe: </label>
-                <input v-model="signupPassword" type="password" name="password" required>
+                <label for="signup-password">
+                    Mot de passe: <input id="signup-password" v-model="signupPassword" type="password" name="password" required>
+                </label>
                 <p v-if="passwordError">{{ passwordError }}</p>
                 <p v-else>(5 à 12 caractères)</p>
             </div>
@@ -42,6 +45,7 @@ export default {
             signupUsername : '',
             signupEmail : '',
             signupPassword : '',
+
             usernameError: null,
             emailError: null,
             passwordError: null,
@@ -50,6 +54,7 @@ export default {
         }
     },
     methods: {
+        //Vérifie les regex
         checkFormInput(usernameInput, emailInput, passwordInput) {
             if(usernameInput == '' || emailInput == '' || passwordInput =='') {
                 this.signupError = 'Veuillez remplir tous les champs !'
@@ -72,6 +77,7 @@ export default {
         passwordRegex(passwordInput){
             return /^[A-Za-z0-9]{5,12}$/.test(passwordInput)
         },
+        //Si la vérification regex est réussie, envoie la requête.
         async handleSignup() {
             if(this.checkFormInput(this.signupUsername, this.signupEmail, this.signupPassword) == true) {
                 this.usernameError = null

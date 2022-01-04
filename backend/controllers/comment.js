@@ -3,13 +3,11 @@ const fs = require('fs');
 const { sequelize, user, post, comment } = require('../models/index');
 
 exports.createComment = (req, res, next) => {
-    console.log(req.body.userUuid)
     user.findOne({ where: { uuid: req.body.userUuid }})
         .then((user) => {
             post.findOne({ where: { uuid: req.params.postUuid }})
                 .then((post) => {
                     const newComment = { content: req.body.content, userId: user.id, postId: post.id };
-                    console.log(post, newComment)
                     comment.create(newComment)
                         .then((newComment) => res.json(newComment))
                         .catch(error => res.status(400).json({ error }));
@@ -36,7 +34,6 @@ exports.modifyComment = (req, res, next) => {
 }
 
 exports.deleteComment = (req, res, next) => {
-    console.log(req.body, req.params.commentUuid)
     comment.findOne({ where: { uuid: req.params.commentUuid }, include: user})
         .then((comment) => {
             if(req.body.userUuid == comment.user.uuid || req.body.isAdmin == 'admin'){

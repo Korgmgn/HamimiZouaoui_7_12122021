@@ -27,13 +27,15 @@ export default {
     },
     props: ['postUuid'],
     methods: {
+        //Ces fonctions emmetent un event au component parent 
+        //afin de fermer le popup ou relancer la requête GET du parent
         closeModal() {
             this.$emit('close')
         },
         refreshPosts(){
             this.$emit('refresh')
         },
-
+        //Requête permettant de créer un nouveau commentaire
         async handleNewComment() {
             if(this.content && this.content.length >= 2) {
                 await axios.post(`http://localhost:3000/comments/create/${this.postUuid}`, {

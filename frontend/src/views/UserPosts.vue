@@ -67,6 +67,8 @@ export default {
         }
     },
     methods: {
+        //Les fonctions suivantes gèrent l'affichage des components et définissent des valeurs 
+        //d'attributs data à transmettre au component qui va apparaître
         showPosts() {
             this.userPosts = !this.userPosts
         },
@@ -85,6 +87,8 @@ export default {
                 this.commentUuid = event.target.closest('div.text-bloc').getAttribute('data-comment-uuid')
             }
         },
+        //Les fonctions suivantes, déclenchées au clic des boutons de suppression / modification, permettent ces actions  
+        //selon qu'il s'agisse d'un post ou commentaire et vérifie si l'utilisateur en cours a créé ces derniers, ou s'il a le statut administrateur.
         checkUserBeforeModify() {
             const postUserUuid = event.target.closest('div.upper-text-bloc').getAttribute('data-user-uuid')
             const commentUserUuid = event.target.closest('div.upper-text-bloc').getAttribute('data-user-uuid')
@@ -112,6 +116,7 @@ export default {
                 console.log('Vous ne pouvez pas supprimer ce message !')
             }
         },
+        //Cette fonction lancée lors du cycle created, récupère tous les posts et commentaires d'un utilisateur
         async getUserPosts() {
             try {
                 const response = await axios.get(`http://localhost:3000/posts/userposts/${this.$route.params.useruuid}`, {
@@ -119,7 +124,6 @@ export default {
                         Authorization: 'Bearer ' + localStorage.getItem('token')
                     }
                 })
-                console.log(response.data)
                 this.username = response.data.username
                 this.userUuid = response.data.uuid
                 this.posts = response.data.posts
@@ -130,7 +134,8 @@ export default {
                 console.log(error)
             }
         },
-        //Supprime le post OU le commentaire voulu.
+        //Cette fonction est appelé après vérification du status de l'utilisateur en cours, 
+        //et envoie la requête correspondante qui permet la suppression du post ou commentaire
         async deletePostOrComment(eventTarget) {
             const postUuid = event.target.closest('div.text-bloc').getAttribute('data-post-uuid')
             const commentUuid = event.target.closest('div.text-bloc').getAttribute('data-comment-uuid')
@@ -160,6 +165,7 @@ export default {
                 console.log('Une erreur est survenue')
             }
         },
+        //formate la date des posts ou commentaires
         dateFormat(date){
                 if (date) {
                     return moment(String(date)).format('DD/MM/YYYY [à] HH:mm')

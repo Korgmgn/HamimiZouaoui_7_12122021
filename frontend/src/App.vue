@@ -84,7 +84,7 @@ form, .login, .username-input, .password, .email {
     align-self: center;
 }
 .text-box{
-    max-height: 450px;
+    max-height: 600px;
     overflow-y: scroll;
     margin: 15px 0 0 0;
 }
@@ -122,6 +122,14 @@ img {
     padding: 10px 0 10px 0;
     margin: 10px 0 10px 0;
     text-align: left;
+}
+label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+label input {
+    width: 220px;
 }
 form button {
     background: BFBBB4;

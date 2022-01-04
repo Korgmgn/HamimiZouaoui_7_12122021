@@ -54,6 +54,7 @@ export default {
             modalNewPost: false,
             modalNewComment: false,
             modalModifyPost: false,
+
             postUuid: null,
             currentUserUuid: null,
             currentUserStatus: null,
@@ -61,6 +62,8 @@ export default {
         }
     },
     methods: {
+        //Les fonctions suivantes gèrent l'affichage des components et définissent des valeurs 
+        //d'attributs data à transmettre au component qui va apparaître
         showNewPost() {
             this.modalNewPost = !this.modalNewPost
         },
@@ -69,7 +72,6 @@ export default {
             if(this.modalNewComment == true) {
                 this.postUuid = event.target.closest('div.text-bloc').getAttribute('data-post-uuid')
             }
-            console.log(this.postUuid)
         },
         showModificationModal(eventTarget) {
             this.modalModifyPost = !this.modalModifyPost
@@ -77,6 +79,8 @@ export default {
                 this.postUuid = event.target.closest('div.text-bloc').getAttribute('data-post-uuid')
             }
         },
+        //Les fonctions suivantes, déclenchées au clic des boutons de suppression / modification, permettent ces actions  
+        //selon si l'utilisateur en cours a créé ces derniers, ou s'il a le statut administrateur.
         checkUserBeforeModify() {
             const postUserUuid = event.target.closest('div.upper-text-bloc').getAttribute('data-user-uuid')
             if(postUserUuid == this.currentUserUuid || this.currentUserStatus == "admin") {
@@ -93,6 +97,7 @@ export default {
                 console.log('Vous ne pouvez pas supprimer ce post !')
             }
         },
+        //Cette fonction lancée lors du cycle created, récupère tous les posts
         async getAllPosts() {
             try {
                 const response = await axios.get('http://localhost:3000/posts/allposts', {
@@ -108,6 +113,8 @@ export default {
                 console.log(error)
             }
         },
+        //Cette fonction est appelé après vérification du status de l'utilisateur en cours, 
+        //et envoie la requête qui permet la suppression d'un post
         async deletePost(eventTarget) {
             const postUuid = event.target.closest('div.text-bloc').getAttribute('data-post-uuid')
             try {
@@ -121,6 +128,7 @@ export default {
                 console.log(error)
             }
         },
+        //Formatage du timestamp des posts
         dateFormat(date){
                 if (date) {
                     return moment(String(date)).format('DD/MM/YYYY [à] HH:mm')

@@ -48,12 +48,16 @@ export default {
         }
     },
     methods: {
+        //Gère l'affichage des components et définissent des valeurs 
+        //d'attributs data à transmettre au component qui va apparaître
         showModificationModal(eventTarget) {
             this.modalModifyComment = !this.modalModifyComment
             if(this.modalModifyComment == true) {
                 this.commentUuid = event.target.closest('div.text-bloc').getAttribute('data-comment-uuid')
             }
         },
+        //Les fonctions suivantes, déclenchées au clic des boutons de suppression / modification, permettent ces actions
+        //selon si l'utilisateur en cours a créé ces derniers, ou s'il a le statut administrateur.
         checkUserBeforeModify() {
             const commentUserUuid = event.target.closest('div.upper-text-bloc').getAttribute('data-user-uuid')
             if(commentUserUuid == this.currentUserUuid || this.currentUserStatus == 'admin') {
@@ -70,6 +74,7 @@ export default {
                 console.log('Vous ne pouvez pas supprimer ce commentaire !')
             }
         },
+        //Cette fonction lancée lors du cycle created, récupère tous les commentaires
         async getPostComments() {
             try{
                 const response = await axios.get(`http://localhost:3000/comments/allcomments/${this.$route.params.postUuid}`, {
@@ -85,6 +90,8 @@ export default {
                 console.log(error)
             }
         },
+        //Cette fonction est appelé après vérification du status de l'utilisateur en cours, 
+        //et envoie la requête qui permet la suppression d'un commentaire
         async deleteComment(eventTarget) {
             const commentUuid = event.target.closest('div.text-bloc').getAttribute('data-comment-uuid')
             try {
@@ -98,6 +105,7 @@ export default {
                 console.log(error)
             }
         },
+        //Formatage du timestamp des commentaires
         dateFormat(date){
                 if (date) {
                     return moment(String(date)).format('DD/MM/YYYY [à] HH:mm')
