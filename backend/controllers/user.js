@@ -4,7 +4,6 @@ const fs = require('fs');
 const { sequelize, user } = require('../models/index');
 
 exports.signup = (req, res, next) => {
-    //req.body = { username, email, password }
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const newUser =  { username: req.body.username, email: req.body.email, password: hash }
